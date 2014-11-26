@@ -2,11 +2,13 @@
 angular.module('irth', ['firebase'])
 .controller('ctrl', function($scope, $firebase){
 	var dbURL = 'https://tezt.firebaseio.com',
-	lifestyle = ['activity', 'diet', 'exercise', 'day', 'insight', 'task'];
-	var ref = {}, sync = {};
+	ref = {}, sync = {};
+	$scope.lifestyle = ['activity', 'diet', 'exercise', 'day', 'insight', 'task'];
 	$scope.syncArray = {};
 	$scope.syncObject = {};
-	angular.forEach(lifestyle, function(life){
+	$scope.beGone = {};
+	angular.forEach($scope.lifestyle, function(life){
+		$scope.beGone[life] = 'display:none';
 		ref[life] = new Firebase(dbURL + '/life/' + life + '/');
 		sync[life] = $firebase(ref[life]);
 		$scope.syncObject[life] = sync[life].$asObject();
@@ -14,22 +16,13 @@ angular.module('irth', ['firebase'])
 	});
 
 //	sync.$set('life',{activity:0,diet:0,exercise:0,assess:0});
-
-	$scope.exerciseBeGone = 'display:none';
-	$scope.dietBeGone = 'display:none';
-	$scope.dayBeGone = 'display:none';
-	$scope.insightBeGone = 'display:none';
-	$scope.taskBeGone = 'display:none';
-
+	$scope.beGone.activity = '';
 
 	$scope.hideAll = function () {
-		$scope.activityBeGone = 'display:none';
-		$scope.exerciseBeGone = 'display:none';
-		$scope.dietBeGone = 'display:none';
-		$scope.dayBeGone = 'display:none';
-		$scope.insightBeGone = 'display:none';
-		$scope.taskBeGone = 'display:none';
-	};
+		angular.forEach($scope.lifestyle, function(life){
+			$scope.beGone[life] = 'display:none';
+		});
+	};	
 	$scope.addActivity = function(name, time, details, tags) {
 		sync.activity.$push({name:name, time:time, details:details, tags:tags});
 	};

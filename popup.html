@@ -7,10 +7,11 @@
       <style>
         body {
           width: 600px;
-          height: 400px;
           background: rgba(245,109,227,.38);
         }
-        input, textarea, button {font-size: 1.4em; width:100%}
+        input, textarea {font-size: 1.4em; width:100%}
+        button {font-size: 1.6em;}
+        button.submit {float:right; width:50%;}
       </style>
       <!--
         - JavaScript and HTML must be in separate files: see our Content Security
@@ -27,22 +28,8 @@
 
   <body ng-controller="ctrl" >
 
-  {{syncArray}}
-
-    <div style="text-align:center; background:white; padding:3% 0;">
-
-      <button style="width:15%;" ng-click="hideAll(); activityBeGone = ''"><h4>Activity </h4></button>
-      <span style="width:2%"></span>
-      <button style="width:15%" ng-click="hideAll(); dietBeGone = ''"><h4>Diet </h4></button>
-      <span style="width:2%"></span>
-      <button style="width:15%" ng-click="hideAll(); exerciseBeGone = ''"><h4>Exercise </h4></button>
-      <span style="width:2%"></span>
-      <button style="width:15%" ng-click="hideAll(); dayBeGone = ''"><h4>Day </h4></button>
-      <span style="width:2%"></span>
-      <button style="width:15%" ng-click="hideAll(); insightBeGone = ''"><h4>Insight </h4></button>
-      <span style="width:2%"></span>
-      <button style="width:15%" ng-click="hideAll(); taskBeGone = ''"><h4>Task </h4></button>
-
+    <div style="text-align:center; background:white;">
+      <button ng-repeat="life in lifestyle" style="width:15%;" ng-click="hideAll(); beGone[life] = ''">{{life}}</button>
     </div>
 
     <br>
@@ -53,7 +40,7 @@
 Activity
 
 -->
-      <div style="{{activityBeGone}}">
+      <div style="{{beGone.activity}}">
         <label for="activity">
           Activity Form
         </label>
@@ -65,7 +52,7 @@ Activity
             <input type="text" ng-model="tag" placeholder="Tags of Activity" ng-blur="activity.tags[$index] = tag;"/>
             <a ng-show="$last" ng-click="activity.tags[$index + 1] = '';">Another Tag</a>
           </div>
-          <button>Submit</button>
+          <button class="submit">Submit</button>
         </form>
       </div>
 <!--
@@ -73,7 +60,7 @@ Activity
 Diet
 
 -->
-      <div style="{{dietBeGone}}">
+      <div style="{{beGone.diet}}">
         <label for="diet">
           Diet Form
         </label>
@@ -99,7 +86,7 @@ Diet
             <input type="text" ng-model="tag" placeholder="Tags of Meal" ng-blur="diet.tags[$index] = tag; "/>
             <a ng-show="$last" ng-click="diet.tags[$index + 1] = '';">Another Tag</a>
           </div>
-          <button>Submit</button>
+          <button class="submit">Submit</button>
         </form>
       </div>
 <!--
@@ -107,7 +94,7 @@ Diet
 Exercise
 
 -->
-      <div style="{{exerciseBeGone}}">
+      <div style="{{beGone.exercise}}">
         <label for="exercise">
           Exercise Form
         </label>
@@ -132,7 +119,7 @@ Exercise
             <input type="text" ng-model="tag" placeholder="Tags of Exercise" ng-blur="exercise.tags[$index] = tag;"/>
             <a ng-show="$last" ng-click="exercise.tags[$index + 1] = '';">Another Tag</a>
           </div>
-          <button>Submit</button>
+          <button class="submit">Submit</button>
         </form>
       </div>
 <!--
@@ -140,7 +127,7 @@ Exercise
 Day
 
 -->
-      <div style="{{dayBeGone}}">
+      <div style="{{beGone.day}}">
         <label for="day">
           Day Form
         </label>
@@ -148,7 +135,7 @@ Day
           <textarea type="text" ng-model="day.recap" placeholder="Particulars of the day, best achievements"></textarea>
           <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="day.rating" ng-options="rating for rating in ratings | uppercase"><option value="">Rate the day</option></select>
           <textarea type="text" ng-model="day.goals" placeholder="Goals for tomorrow"></textarea>
-          <button>Submit</button>
+          <button class="submit">Submit</button>
         </form>
       </div>
 <!--
@@ -156,7 +143,7 @@ Day
 Insight
 
 -->
-      <div style="{{insightBeGone}}">
+      <div style="{{beGone.insight}}">
         <label for="insight">
           Insight Form
         </label>
@@ -168,7 +155,7 @@ Insight
             <input type="text" ng-model="tag" placeholder="Tags of Insight" ng-blur="insight.tags[$index] = tag; "/>
             <a ng-show="$last" ng-click="insight.tags[$index + 1] = '';">Another Tag</a>
           </div>
-          <button>Submit</button>
+          <button class="submit">Submit</button>
         </form>
       </div>
 <!--
@@ -176,7 +163,7 @@ Insight
 Tasks
 
 -->
-      <div style="{{taskBeGone}}">
+      <div style="{{beGone.task}}">
         <label for="tasks">
           Tasks Form
         </label>
@@ -188,7 +175,7 @@ Tasks
             <input type="text" ng-model="tag" placeholder="Tags of Task" ng-blur="task.tags[$index] = tag;"/>
             <a ng-show="$last" ng-click="task.tags[$index + 1] = '';">Another Tag</a>
           </div>
-          <button>Submit</button>
+          <button class="submit">Submit</button>
         </form>
       </div>
 
