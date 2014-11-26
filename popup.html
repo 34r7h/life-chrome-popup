@@ -1,0 +1,202 @@
+<!doctype html>
+<html ng-app="irth">
+
+  <head>
+
+      <title>Tracking Popdown</title>
+      <style>
+        body {
+          width: 600px;
+          height: 400px;
+          background: rgba(245,109,227,.38);
+        }
+        input, textarea, button {font-size: 1.4em; width:100%}
+      </style>
+      <!--
+        - JavaScript and HTML must be in separate files: see our Content Security
+        - Policy documentation[1] for details and explanation.
+        -
+        - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+       -->
+  </head>
+
+    <script src="angular.min.js"></script>
+    <script src="firebase.js"></script>
+    <script src="angularfire.js"></script>
+    <script src="irth.js"></script>
+
+  <body ng-controller="ctrl" >
+
+  {{syncArray}}
+
+    <div style="text-align:center; background:white; padding:3% 0;">
+
+      <button style="width:15%;" ng-click="hideAll(); activityBeGone = ''"><h4>Activity </h4></button>
+      <span style="width:2%"></span>
+      <button style="width:15%" ng-click="hideAll(); dietBeGone = ''"><h4>Diet </h4></button>
+      <span style="width:2%"></span>
+      <button style="width:15%" ng-click="hideAll(); exerciseBeGone = ''"><h4>Exercise </h4></button>
+      <span style="width:2%"></span>
+      <button style="width:15%" ng-click="hideAll(); dayBeGone = ''"><h4>Day </h4></button>
+      <span style="width:2%"></span>
+      <button style="width:15%" ng-click="hideAll(); insightBeGone = ''"><h4>Insight </h4></button>
+      <span style="width:2%"></span>
+      <button style="width:15%" ng-click="hideAll(); taskBeGone = ''"><h4>Task </h4></button>
+
+    </div>
+
+    <br>
+
+    <div style="width:100%; height:100%;">
+<!--
+
+Activity
+
+-->
+      <div style="{{activityBeGone}}">
+        <label for="activity">
+          Activity Form
+        </label>
+        <form id="activity" ng-submit="addActivity(activity.name,activity.time,activity.details,activity.tags); activity.name=''; activity.time=''; activity.details=''; activity.tags=['']" ng-init="activity.tags = ['']">
+          <input type="text" ng-model="activity.name" placeholder="Name of Activity"/>
+          <input type="number" ng-model="activity.time" placeholder="Time of Activity"/>
+          <textarea type="text" ng-model="activity.details" placeholder="Details of Activity"></textarea>
+          <div ng-repeat="tag in activity.tags" >
+            <input type="text" ng-model="tag" placeholder="Tags of Activity" ng-blur="activity.tags[$index] = tag;"/>
+            <a ng-show="$last" ng-click="activity.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button>Submit</button>
+        </form>
+      </div>
+<!--
+
+Diet
+
+-->
+      <div style="{{dietBeGone}}">
+        <label for="diet">
+          Diet Form
+        </label>
+        <form id="diet" ng-submit="addDiet(diet.name, diet.time, diet.nutrition, diet.details,diet.tags); diet.name=''; diet.time=''; diet.nutrition={}; diet.details=''; diet.tags=[''];" ng-init="diet.tags = ['']">
+          <select ng-init="meals = ['breakfast', 'lunch', 'dinner', 'snack']" ng-model="diet.name" ng-options="meal for meal in meals | uppercase"><option value="">Choose meal type</option></select>
+          <input type="number" ng-model="diet.time" placeholder="Time of Meal"/>
+          <div ng-init="nutrition.types = ['fats', 'grains', 'fruits', 'vegetables', 'seeds-nuts', 'sugars']; nutrition.amounts = ['none', 'some', 'much', 'lots']">
+            <table>
+              <tr>
+                <th>Nutrition Type</th>
+                <th>Nutrition Amount</th>
+              </tr>
+              <tr ng-repeat="type in nutrition.types">
+                <td>{{type}}</td>
+                <td ng-repeat="amount in nutrition.amounts">
+                  <input type="radio" ng-model="diet.nutrition[type]" value="{{amount}}"/>{{amount}}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <textarea type="text" ng-model="diet.details" placeholder="Details of Diet"></textarea>
+          <div ng-repeat="tag in diet.tags" >
+            <input type="text" ng-model="tag" placeholder="Tags of Meal" ng-blur="diet.tags[$index] = tag; "/>
+            <a ng-show="$last" ng-click="diet.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button>Submit</button>
+        </form>
+      </div>
+<!--
+
+Exercise
+
+-->
+      <div style="{{exerciseBeGone}}">
+        <label for="exercise">
+          Exercise Form
+        </label>
+        <form id="exercise" ng-submit="addExercise(exercise.time, exercise.mode, exercise.details, exercise.tags); exercise.time=''; exercise.mode={}; exercise.details=''; exercise.tags=[''];" ng-init="exercise.tags = ['']">
+          <input type="number" ng-model="exercise.time" placeholder="Duration of Exercise"/>
+          <div ng-init="mode.types = ['cardio', 'strength', 'hiit', 'flex']; mode.amounts = ['none', 'some', 'much', 'lots']">
+            <table>
+              <tr>
+                <th>Mode Type</th>
+                <th>Mode Amount</th>
+              </tr>
+              <tr ng-repeat="type in mode.types">
+                <td>{{type}}</td>
+                <td ng-repeat="amount in mode.amounts">
+                  <input type="radio" ng-model="exercise.mode[type]" value="{{amount}}"/>{{amount}}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <textarea type="text" ng-model="exercise.details" placeholder="Details of Routine"></textarea>
+          <div ng-repeat="tag in exercise.tags" >
+            <input type="text" ng-model="tag" placeholder="Tags of Exercise" ng-blur="exercise.tags[$index] = tag;"/>
+            <a ng-show="$last" ng-click="exercise.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button>Submit</button>
+        </form>
+      </div>
+<!--
+
+Day
+
+-->
+      <div style="{{dayBeGone}}">
+        <label for="day">
+          Day Form
+        </label>
+        <form id="day" ng-submit="addDay(day.recap, day.rating, day.goals); day.recap = ''; day.rating = ''; day.goals='';">
+          <textarea type="text" ng-model="day.recap" placeholder="Particulars of the day, best achievements"></textarea>
+          <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="day.rating" ng-options="rating for rating in ratings | uppercase"><option value="">Rate the day</option></select>
+          <textarea type="text" ng-model="day.goals" placeholder="Goals for tomorrow"></textarea>
+          <button>Submit</button>
+        </form>
+      </div>
+<!--
+
+Insight
+
+-->
+      <div style="{{insightBeGone}}">
+        <label for="insight">
+          Insight Form
+        </label>
+        <form id="insight" ng-submit="addInsight(insight.name, insight.importance, insight.details, insight.tags); insight.name=''; insight.importance=''; insight.details=''; insight.tags=['']; " ng-init="insight.tags = ['']">
+          <textarea type="text" ng-model="insight.name" placeholder="Name of Insight"></textarea>
+          <select ng-init="importance = ['extremely', 'sort-of', 'meh']" ng-model="insight.importance" ng-options="importance for importance in importance | uppercase"><option value="">Importance of Insight</option></select>
+          <textarea type="text" ng-model="insight.details" placeholder="Dig deep"></textarea>
+          <div ng-repeat="tag in insight.tags">
+            <input type="text" ng-model="tag" placeholder="Tags of Insight" ng-blur="insight.tags[$index] = tag; "/>
+            <a ng-show="$last" ng-click="insight.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button>Submit</button>
+        </form>
+      </div>
+<!--
+
+Tasks
+
+-->
+      <div style="{{taskBeGone}}">
+        <label for="tasks">
+          Tasks Form
+        </label>
+        <form id="tasks" ng-submit="addTask(task.name, task.importance, task.details, task.tags); task.name=''; task.importance=''; task.details=''; task.tags=[''];" ng-init="task.tags = ['']">
+          <textarea type="text" ng-model="task.name" placeholder="Name this Task"></textarea>
+          <select ng-init="importance = ['extremely', 'sort-of', 'meh']" ng-model="task.importance" ng-options="importance for importance in importance | uppercase"><option value="">Importance of Task</option></select>
+          <textarea type="text" ng-model="task.details" placeholder="Details of task"></textarea>
+          <div ng-repeat="tag in task.tags">
+            <input type="text" ng-model="tag" placeholder="Tags of Task" ng-blur="task.tags[$index] = tag;"/>
+            <a ng-show="$last" ng-click="task.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button>Submit</button>
+        </form>
+      </div>
+
+
+
+    </div>
+
+
+  </body>
+</html>
+
