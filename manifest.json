@@ -12,6 +12,12 @@
     "default_title": "Life"
 
   },
+  "icons": { 
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png" 
+    },
+    
     "permissions": [
         "<all_urls>",
         "notifications",
