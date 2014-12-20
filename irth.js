@@ -3,7 +3,8 @@ angular.module('irth', ['firebase'])
 .controller('ctrl', function($scope, $firebase, $firebaseAuth){
 	var dbURL = 'https://tezt.firebaseio.com/',
 	ref = {}, sync = {}, bind = {};
-	$scope.lifestyle = ['activity', 'diet', 'exercise', 'day', 'insight', 'task', 'event'];
+	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task' ];
+
 	$scope.life = [];
 	$scope.syncArray = {};
 	$scope.syncObject = {};
@@ -44,14 +45,20 @@ angular.module('irth', ['firebase'])
 		});
 	};
 	$scope.addActivity = function(name, time, details, tags) {
+		console.log('args', arguments);
 		var timestamp = Date.now();
-		sync.activity.$push({name:name, time:time, details:details, tags:tags, created:timestamp});
+		sync.activity.$push({name:name, time:Date.now(), details:details, tags:tags, created:timestamp});
+	};
+	var addActivity = function(name, time, details, tags) {
+		var timestamp = Date.now();
+		sync.activity.$push({name:name, time: time, details:details, tags:tags, created:timestamp});
 	};
 	$scope.addEvent = function(name, time) {
 		var timestamp = Date.now();
 		sync.event.$push({name:name, time:time, created:timestamp});
 	};
-	$scope.addDiet = function(name, time, nutrition, details, tags) {
+	$scope['add'+'Diet'] = function(name, time, nutrition, details, tags) { // todo proof of forming named functions in a loop
+		console.log(name, time, nutrition, details, tags);
 		var timestamp = Date.now();
 		sync.diet.$push({name:name, time:time, nutrition:nutrition, details:details, tags:tags, created:timestamp});
 	};
@@ -94,8 +101,12 @@ angular.module('irth', ['firebase'])
 	};
 	$scope.removeEntry = function(type, id) {
 		sync[type].$remove(id);
-	}
-})
+	};
+
+		$scope.cLifestyle = [{name:'activity', models:{name: new String(), time: new Number(), details: new String(), tags: new Array() }, methods:{create:$scope.addActivity}}];
+
+
+	})
 .filter('trustAsResourceUrl', ['$sce', function($sce) {
 	return function(val) {
 		return $sce.trustAsResourceUrl(val);

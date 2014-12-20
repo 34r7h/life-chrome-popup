@@ -47,20 +47,36 @@ Activity
 
 -->
 
-  <!-- Building one-app
-  div ng-repeat="part in ">
-    <form id="activity" ng-submit="addActivity(newActivity.name, newActivity.time, newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
-      <input type="text" ng-model="newActivity.name" placeholder="Activity"/>
-      <input type="number" ng-model="newActivity.time" placeholder="Duration"/>
-      <textarea type="text" ng-model="newActivity.details" placeholder="Details"></textarea>
-      <div ng-repeat="tag in newActivity.tags">
-        <input type="text" ng-model="tag" placeholder="Tags" ng-blur="newActivity.tags[$index] = tag;"/>
-        <a ng-show="$last" ng-click="newActivity.tags[$index + 1] = '';">Another Tag</a>
-      </div>
-      <button class="submit">Submit</button>
-    </form>
-  </div-->
+  <div ng-repeat="life in cLifestyle">
+    <form id="{{life.name}}" ng-submit="life.methods.create(life.models.name, life.models.time, life.models.details, life.models.tags); life.models.name=''; life.models.time=''; life.models.details=''; life.models.tags=['']" ng-init="life.models.tags = ['']">
+      <div ng-repeat="(key,model) in life.models">
 
+        {{key+ model}}
+        <div ng-if="typeof === 'string'">
+          {{model.key}}
+          <textarea ng-model="key" name="{{key}}" id="" cols="30" rows="10" placeholder="{{key}}"></textarea>
+        </div>
+        <div ng-if="typeof === 'number'">
+          <input type="number" ng-model="key" name="{{key}}" placeholder="{{key}}"/>
+        </div>
+        <div ng-if="typeof === 'array'">
+          <div ng-repeat="tag in model">
+            <input type="text" ng-model="tag" placeholder="Tags" ng-blur="life.models.tags[$index] = tag;"/>
+            <a ng-show="$last" ng-click="life.models.tags[$index + 1] = ' ';">Another Tag</a>
+          </div>
+        </div>
+      </div>
+
+      <input type="text" ng-model="life.models.name" placeholder="Activity"/>
+      <input type="number" ng-model="life.models.time" placeholder="Duration"/>
+      <textarea type="text" ng-model="life.models.details" placeholder="Details"></textarea>
+      <div ng-repeat="tag in life.models.tags">
+        <input type="text" ng-model="tag" placeholder="Tags" ng-blur="life.models.tags[$index] = tag;"/>
+        <a ng-show="$last" ng-click="life.models.tags[$index + 1] = '';">Another Tag</a>
+      </div>
+      <button class="submit">Submit {{life.name}}</button>
+    </form>
+  </div>
 
       <div style="{{beGone.activity}}">
         Today's Goals: 
@@ -91,6 +107,8 @@ Activity
         </form>
         Past Activity:
         <span ng-repeat="activity in syncArray.activity | limitTo:-100">
+          <span ng-show="!remove" ng-click="remove = true"> X </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('activity',activity.$id)"> Remove Task </a>{{activity.created | date }}
+
 
             {{activity.name}}<i ng-if="!$last">, </i>
 
