@@ -2,19 +2,24 @@
 angular.module('irth', ['firebase'])
 .controller('ctrl', function($scope, $firebase, $firebaseAuth){
 	var dbURL = 'https://tezt.firebaseio.com/',
-	ref = {}, sync = {};
+	ref = {}, sync = {}, bind = {};
 	$scope.lifestyle = ['activity', 'diet', 'exercise', 'day', 'insight', 'task', 'event'];
 	$scope.life = [];
 	$scope.syncArray = {};
 	$scope.syncObject = {};
+	$scope.bindObject = {};
 	$scope.beGone = {};
 	angular.forEach($scope.lifestyle, function(life){
 		$scope.beGone[life] = 'display:none';
 		ref[life] = new Firebase(dbURL + '/life/irth/' + life);
 		sync[life] = $firebase(ref[life]);
 		$scope.syncObject[life] = sync[life].$asObject();
+		bind[life] = sync[life].$asObject();
 		$scope.syncArray[life] = sync[life].$asArray();
+		$scope.bindObject[life] = bind[life].$bindTo($scope, life.toString());
 	});
+	console.log('bond', bind);
+		console.log('$scope.bindObject', $scope.bindObject);
 	$scope.login = function(){
 		var loginRef = new Firebase("https://tezt.firebaseio.com");
 		if(auth){
@@ -58,13 +63,26 @@ angular.module('irth', ['firebase'])
 		var timestamp = Date.now();
 		sync.day.$push({recap:recap, rating:rating, goals:goals, created:timestamp});
 	};
-	$scope.addInsight = function(details, tags) {
+	$scope.addInsight = function(title, note) {
+		console.log(title,note);
+		if(note === undefined){
+			var note = 'no note.';
+		}
+		if(title === undefined){
+			var title = 'untitled';
+		}
 		var timestamp = Date.now();
-		sync.insight.$push({details:details, tags:tags, created:timestamp});
+		sync.insight.$push({title:title, note:note, created:timestamp});
 	};
-	$scope.addTask = function(name, importance, details, tags) {
+	$scope.addTask = function(name, description) {
+		if(name === undefined){
+			var name = 'unnamed';
+		}
+		if(description === undefined){
+			var description = 'no description';
+		}
 		var timestamp = Date.now();
-		sync.task.$push({name:name, details:details, importance:importance, tags:tags, created:timestamp});
+		sync.task.$push({name:name, description:description, created:timestamp});
 	};
 	$scope.completeTask = function(id) {
 		var timestamp = Date.now();

@@ -1,0 +1,300 @@
+<!doctype html>
+<html ng-app="irth">
+
+  <head>
+
+      <title>Tracking Popdown</title>
+      <style>
+        body {
+          min-width:500px;
+          width: 100%;
+          background: rgba(245,246,227,.38);
+        }
+        form {width:100%}
+        .posts hr, br {width:92%; margin:4%}
+        input[type=text] {width:92%; margin: 4%; font-size: 2em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
+        textarea {width:92%; margin: 4%; font-size: 1.4em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
+        .posts {width:32%; float:left; background: rgba(255,255,255, .8); margin:.6%}
+        .posts input[type=text] { font-size: 1.6em; }
+        .posts textarea { font-size: 1.2em; }
+        button {font-size: 1.6em;}
+        button.submit {width:100%;}
+      </style>
+      <!--
+        - JavaScript and HTML must be in separate files: see our Content Security
+        - Policy documentation[1] for details and explanation.
+        -
+        - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+       -->
+  </head>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/angularfire/dist/angularfire.js"></script>
+    <script src="irth.js"></script>
+
+  <body ng-controller="ctrl" >
+
+    <div style="text-align:center; background:white; width:20%; float:left">
+      <button style="width:100%; margin-bottom: .1em; margin-right:1em" ng-click="login()">Login</button><button style="width:100%; margin-bottom: .1em" ng-repeat="life in lifestyle" style="width:15%;" ng-click="hideAll(); beGone[life] = ''">{{life}}</button>
+
+    </div>
+
+<div style="width: 79%; float:left; padding-left:1%;">
+<!--
+
+Activity
+
+-->
+
+  <!-- Building one-app
+  div ng-repeat="part in ">
+    <form id="activity" ng-submit="addActivity(newActivity.name, newActivity.time, newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
+      <input type="text" ng-model="newActivity.name" placeholder="Activity"/>
+      <input type="number" ng-model="newActivity.time" placeholder="Duration"/>
+      <textarea type="text" ng-model="newActivity.details" placeholder="Details"></textarea>
+      <div ng-repeat="tag in newActivity.tags">
+        <input type="text" ng-model="tag" placeholder="Tags" ng-blur="newActivity.tags[$index] = tag;"/>
+        <a ng-show="$last" ng-click="newActivity.tags[$index + 1] = '';">Another Tag</a>
+      </div>
+      <button class="submit">Submit</button>
+    </form>
+  </div-->
+
+
+      <div style="{{beGone.activity}}">
+        Today's Goals: 
+        <span ng-repeat="goals in syncArray.day | limitTo:-1">
+          <span ng-repeat="goal in goals.goals">
+            <b>{{goal.name}}</b>
+            <i ng-if="!$last">, </i>
+          </span>
+        </span>
+        <hr>
+        Open Tasks:
+        <span ng-repeat="task in syncArray.task">
+          <b ng-show="!task.done === true" ng-click="completeTask(task.$id)" >{{task.name}}<i ng-if="!$last">, </i></b>
+        </span>
+        <hr>
+        <label for="activity">
+          New Activity
+        </label>
+        <form id="activity" ng-submit="addActivity(newActivity.name, newActivity.time, newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
+          <input type="text" ng-model="newActivity.name" placeholder="Activity"/>
+          <input type="number" ng-model="newActivity.time" placeholder="Duration"/>
+          <textarea type="text" ng-model="newActivity.details" placeholder="Details"></textarea>
+          <div ng-repeat="tag in newActivity.tags">
+            <input type="text" ng-model="tag" placeholder="Tags" ng-blur="newActivity.tags[$index] = tag;"/>
+            <a ng-show="$last" ng-click="newActivity.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button class="submit">Submit</button>
+        </form>
+        Past Activity:
+        <span ng-repeat="activity in syncArray.activity | limitTo:-100">
+
+            {{activity.name}}<i ng-if="!$last">, </i>
+
+        </span>
+        
+      </div>
+<!--
+
+Events
+
+-->
+      <div style="{{beGone.event}}">
+
+        <hr>
+        <label for="event">
+          New Event
+        </label>
+        <form id="event" ng-submit="addEvent(newEvent.name,newEvent.time); newEvent.name=''; newEvent.time='';">
+          <input type="text" ng-model="newEvent.name" placeholder="Event"/>
+          <input type="number" ng-model="newEvent.time" placeholder="Time"/>
+          <button class="submit">Submit</button>
+        </form>
+        Past Events:
+        <span ng-repeat="event in syncArray.event | limitTo:-100">
+
+            {{event.created | date }} {{event.time}}: {{event.name}}<i ng-if="!$last">, </i>
+
+
+        </span>
+        
+      </div>
+<!--
+
+Diet
+
+-->
+      <div style="{{beGone.diet}}">
+        <label for="diet">
+          Diet Form
+        </label>
+        <form id="diet" ng-submit="addDiet(newDiet.name, newDiet.time, newDiet.nutrition, newDiet.details,newDiet.tags); newDiet.name=''; newDiet.time=''; newDiet.nutrition={}; newDiet.details=''; newDiet.tags=[''];" ng-init="newDiet.tags = ['']">
+          <select ng-init="meals = ['breakfast', 'lunch', 'dinner', 'snack']" ng-model="newDiet.name" ng-options="meal for meal in meals | uppercase"><option value="">Choose meal type</option></select>
+          <input type="number" ng-model="newDiet.time" placeholder="Time of Meal"/>
+          <div ng-init="nutrition.types = ['fats', 'grains', 'fruits', 'vegetables', 'seeds-nuts', 'sugars']; nutrition.amounts = ['none', 'some', 'much', 'lots']">
+            <table>
+              <tr>
+                <th>Nutrition Type</th>
+                <th>Nutrition Amount</th>
+              </tr>
+              <tr ng-repeat="type in nutrition.types">
+                <td>{{type}}</td>
+                <td ng-repeat="amount in nutrition.amounts">
+                  <input type="radio" ng-model="newDiet.nutrition[type]" value="{{amount}}"/>{{amount}}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <textarea type="text" ng-model="newDiet.details" placeholder="Details of Meal"></textarea>
+          <div ng-repeat="tag in newDiet.tags" >
+            <input type="text" ng-model="tag" placeholder="Add tag" ng-blur="newDiet.tags[$index] = tag; "/>
+            <a ng-show="$last" ng-click="newDiet.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button class="submit">Submit</button>
+        </form>
+        <div ng-repeat="meal in syncArray.diet">{{meal}}</div>
+      </div>
+<!--
+
+Exercise
+
+-->
+      <div style="{{beGone.exercise}}">
+        <label for="exercise">
+          Exercise Form
+        </label>
+        <form id="exercise" ng-submit="addExercise(newExercise.time, newExercise.mode, newExercise.details, newExercise.tags); newExercise.time=''; newExercise.mode={}; newExercise.details=''; newExercise.tags=[''];" ng-init="newExercise.tags = ['']">
+          <input type="number" ng-model="newExercise.time" placeholder="Duration of Exercise"/>
+          <div ng-init="mode.types = ['cardio', 'strength', 'hiit', 'flex']; mode.amounts = ['none', 'some', 'much', 'lots']">
+            <table>
+              <tr>
+                <th>Mode Type</th>
+                <th>Mode Amount</th>
+              </tr>
+              <tr ng-repeat="type in mode.types">
+                <td>{{type}}</td>
+                <td ng-repeat="amount in mode.amounts">
+                  <input type="radio" ng-model="newExercise.mode[type]" value="{{amount}}"/>{{amount}}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <textarea type="text" ng-model="newExercise.details" placeholder="Details of Routine"></textarea>
+          <div ng-repeat="tag in newExercise.tags" >
+            <input type="text" ng-model="tag" placeholder="Tags of Exercise" ng-blur="newExercise.tags[$index] = tag;"/>
+            <a ng-show="$last" ng-click="newExercise.tags[$index + 1] = '';">Another Tag</a>
+          </div>
+          <button class="submit">Submit</button>
+        </form>
+        <div ng-repeat="exercise in syncArray.exercise">{{exercise}}</div>
+
+      </div>
+<!--
+
+Day
+
+-->
+      <div style="{{beGone.day}}">
+        <label for="day">
+          <h3>Day Form</h3>
+        </label>
+        <form id="day" ng-submit="addDay(newDay.recap, newDay.rating, newDay.goals); newDay.recap = ''; newDay.rating = ''; newDay.goals='';">
+          <textarea type="text" ng-model="newDay.recap" placeholder="Particulars of the day, best achievements"></textarea>
+          <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="newDay.rating" ng-options="rating for rating in ratings | uppercase"><option value="">Rate the day</option></select>
+          <div ng-init="newDay.goals = [{name:'', done: false}];">
+            <div ng-repeat="goal in newDay.goals track by $index" >
+              <textarea type="text" ng-model="newDay.goals[$index].name" placeholder="A goal for tomorrow">
+              </textarea>
+              <div ng-if="$last"><a ng-click="$parent.day.goals[$index + 1] = {name:'', done: false};">Add Goal</a></div>
+            </div>
+          </div>  
+          <button class="submit">Submit</button>
+        </form>
+        <hr>
+        <h3>Past 5 Days</h3>
+        <div style="width:50%; float:left; margin:none;">
+          <ul style=" padding:1em">
+          <h4>Summaries</h4>
+            <li ng-repeat="day in syncArray.day | limitTo:-5">{{day.recap}}</li>
+          </ul>
+        </div>
+        <div style="width:50%; float:left; margin:none;">
+          <ul style=" padding:1em">
+          <h4>Goals</h4>
+            <li ng-repeat=" day in syncArray.day | limitTo:-5 | orderBy:'$id' ">{{day.goals}}</li>
+          </ul>
+        </div> 
+      </div>
+<!--
+
+Insight
+
+-->
+      <div style="{{beGone.insight}}">
+
+        <form id="insight" ng-submit="addInsight(newInsight.title, newInsight.note); newInsight.title=''; newInsight.note='';">
+          <div>
+            <input type="text" ng-model="newInsight.title" placeholder="Insight Title"/>
+          </div>
+          <div>
+            <textarea type="text" ng-model="newInsight.note" placeholder="Note" ></textarea>
+          </div>
+            <!-- p><a ng-if="$last" ng-click="newInsight.notes[$index + 1] = ' ';">Another Note</a></p -->
+          <div>
+            <button class="submit">Chronicle Insight</button>
+          </div>
+        </form>
+        <div class="posts" ng-repeat="(key, anInsight) in insight">
+          <div><input type="text" ng-model="anInsight.title"/></div>
+          <hr/>
+           <p>
+             <textarea type="text" ng-model="anInsight.note"></textarea>
+           </p>
+
+          <span ng-show="!remove" ng-click="remove = true"> X </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('insight',key)"> Erase Insight </a>{{anInsight.created | date }}
+        </div>
+      </div>
+<!--
+
+Tasks
+
+-->
+      <div style="{{beGone.task}}">
+        <hr/>
+      <h3>Open Tasks</h3>
+        <hr/>
+      <div ng-show="!task.done === true" class="posts" ng-repeat="(key, task) in task">
+        <b ng-click="completeTask(key)" >{{task.name}}</i></b><textarea ng-model="task.description"></textarea></p>
+      </div>
+        <div style="width: 100%; clear: both">
+          <hr/>
+        <h3>Create Task</h3>
+          <hr/>
+          <form name="tasks" id="tasks" ng-submit="addTask(newTask.name, newTask.description); newTask.name=''; newTask.description='';">
+            <input type="text" ng-model="newTask.name" placeholder="Name task" />
+            <textarea type="text" ng-model="newTask.description" placeholder="Describe task"></textarea>
+            <button class="submit">Submit</button>
+          </form>
+        </div>
+        <hr/>
+        <h3>All tasks</h3>
+        <hr/>
+        <div class="posts" ng-repeat="(key,task) in task">
+          <b style="margin-left: 4%; font-size: 1.4em" ng-click="unCompleteTask(key)" >{{task.name}}</i></b>
+          <hr/>
+          <textarea ng-model="task.description"></textarea>
+          <span ng-show="!remove" ng-click="remove = true"> X </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('task',key)"> Remove Task </a>{{task.created | date }}
+
+        </div>
+      </div>
+
+
+</div>
+
+
+  </body>
+</html>
+
