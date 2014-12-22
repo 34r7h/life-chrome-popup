@@ -123,7 +123,8 @@ Events
         <hr/>
         <div ng-repeat="event in syncArray.event | limitTo:-100">
 
-            <div ng-if="$parent.syncArray.event[$index] !== $parent.syncArray.event[$index - 1]">{{event.created | date }}</div> {{event.time}}: {{event.name}}
+            <div ng-if="$parent.syncArray.event[$index] !== $parent.syncArray.event[$index - 1]"><code>{{event.created | date }}</code></div>
+          {{event.time}}: <b>{{event.name}}</b>
 
           <hr/>
         </div>
