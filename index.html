@@ -80,13 +80,11 @@ Activity
           <b ng-show="!task.done === true" ng-click="completeTask(task.$id); newActivity.name = task.name; newActivity.time = Date.now()" >{{task.name}}<i ng-if="!$last">, </i></b>
         </span>
         <hr>
-        <label for="activity">
-          New Activity
-        </label>
-        <form id="activity" ng-submit="addActivity(newActivity.name, (newActivity.hours*60+newActivity.minutes), newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
+
+        <form id="activity" ng-submit="addActivity(newActivity.name, (newActivity.hours*60+newActivity.minutes), newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.hours=''; newActivity.minutes=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
           <input type="text" ng-model="newActivity.name" placeholder="Activity"/>
-          <input type="number" ng-model="newActivity.hours" placeholder="hours"/>
-          <input type="number" ng-model="newActivity.minutes" placeholder="minutes"/>
+          <input id="time" type="number" ng-model="newActivity.hours" placeholder="Hours"/>
+          <input type="number" ng-model="newActivity.minutes" placeholder="Minutes"/>
           <textarea type="text" ng-model="newActivity.details" placeholder="Details"></textarea>
           <div ng-repeat="tag in newActivity.tags">
             <input type="text" ng-model="tag" placeholder="Tags" ng-blur="newActivity.tags[$index] = tag;"/>
@@ -122,12 +120,13 @@ Events
           <button class="submit">Submit</button>
         </form>
         Past Events:
-        <span ng-repeat="event in syncArray.event | limitTo:-100">
+        <hr/>
+        <div ng-repeat="event in syncArray.event | limitTo:-100">
 
-            {{event.created | date }} {{event.time}}: {{event.name}}<i ng-if="!$last">, </i>
+            <div ng-if="$parent.syncArray.event[$index] !== $parent.syncArray.event[$index - 1]">{{event.created | date }}</div> {{event.time}}: {{event.name}}
 
-
-        </span>
+          <hr/>
+        </div>
         
       </div>
 <!--
