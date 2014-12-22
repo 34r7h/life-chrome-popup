@@ -77,15 +77,16 @@ Activity
         <hr>
         Open Tasks:
         <span ng-repeat="task in syncArray.task">
-          <b ng-show="!task.done === true" ng-click="completeTask(task.$id)" >{{task.name}}<i ng-if="!$last">, </i></b>
+          <b ng-show="!task.done === true" ng-click="completeTask(task.$id); newActivity.name = task.name; newActivity.time = Date.now()" >{{task.name}}<i ng-if="!$last">, </i></b>
         </span>
         <hr>
         <label for="activity">
           New Activity
         </label>
-        <form id="activity" ng-submit="addActivity(newActivity.name, newActivity.time, newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
+        <form id="activity" ng-submit="addActivity(newActivity.name, (newActivity.hours*60+newActivity.minutes), newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
           <input type="text" ng-model="newActivity.name" placeholder="Activity"/>
-          <input type="number" ng-model="newActivity.time" placeholder="Duration"/>
+          <input type="number" ng-model="newActivity.hours" placeholder="hours"/>
+          <input type="number" ng-model="newActivity.minutes" placeholder="minutes"/>
           <textarea type="text" ng-model="newActivity.details" placeholder="Details"></textarea>
           <div ng-repeat="tag in newActivity.tags">
             <input type="text" ng-model="tag" placeholder="Tags" ng-blur="newActivity.tags[$index] = tag;"/>
@@ -94,13 +95,14 @@ Activity
           <button class="submit">Submit</button>
         </form>
         Past Activity:
-        <span ng-repeat="activity in syncArray.activity | limitTo:-100">
+        <div ng-repeat="activity in syncArray.activity | limitTo:-100">
+          <hr/>
           <span ng-show="!remove" ng-click="remove = true"> X </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('activity',activity.$id)"> Remove Task </a>{{activity.created | date }}
 
 
-            {{activity.name}}<i ng-if="!$last">, </i>
-
-        </span>
+            <b>{{activity.name}}</b> `{{activity.time}}` minutes<i ng-if="!$last">, </i>
+          <hr/>
+        </div>
         
       </div>
 <!--

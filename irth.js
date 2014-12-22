@@ -47,11 +47,11 @@ angular.module('irth', ['firebase'])
 	$scope.addActivity = function(name, time, details, tags) {
 		console.log('args', arguments);
 		var timestamp = Date.now();
-		sync.activity.$push({name:name, time:Date.now(), details:details, tags:tags, created:timestamp});
+		sync.activity.$push({name:name, time:time, details:details, tags:tags, created:timestamp});
 	};
 	var addActivity = function(name, time, details, tags) {
 		var timestamp = Date.now();
-		var shipment = {name:name, time: time, details:details, tags:tags, created:timestamp}
+		var shipment = {name:name, time: time, details:details, tags:tags, created:timestamp};
 		sync.activity.$push(shipment);
 	};
 	$scope.addEvent = function(name, time) {
