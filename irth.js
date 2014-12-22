@@ -1,7 +1,7 @@
 'use strict';
 angular.module('irth', ['firebase'])
 .controller('ctrl', function($scope, $firebase, $firebaseAuth){
-	var dbURL = 'https://tezt.firebaseio.com/',
+	var dbURL = 'https://yourlife.firebaseio.com/',
 	ref = {}, sync = {}, bind = {};
 	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task' ];
 
@@ -12,7 +12,7 @@ angular.module('irth', ['firebase'])
 	$scope.beGone = {};
 	angular.forEach($scope.lifestyle, function(life){
 		$scope.beGone[life] = 'display:none';
-		ref[life] = new Firebase(dbURL + '/life/irth/' + life);
+		ref[life] = new Firebase(dbURL + '/irth/' + life);
 		sync[life] = $firebase(ref[life]);
 		$scope.syncObject[life] = sync[life].$asObject();
 		bind[life] = sync[life].$asObject();
@@ -51,7 +51,8 @@ angular.module('irth', ['firebase'])
 	};
 	var addActivity = function(name, time, details, tags) {
 		var timestamp = Date.now();
-		sync.activity.$push({name:name, time: time, details:details, tags:tags, created:timestamp});
+		var shipment = {name:name, time: time, details:details, tags:tags, created:timestamp}
+		sync.activity.$push(shipment);
 	};
 	$scope.addEvent = function(name, time) {
 		var timestamp = Date.now();
