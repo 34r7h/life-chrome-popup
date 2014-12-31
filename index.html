@@ -14,13 +14,14 @@
           max-width: 100%;
           background: rgba(245,246,227,.38);
         }
-        a {font-family: "Lato", "Helvetica Neue", Arial, sans-serif; color:darkorchid; text-shadow: 0px 0px 1px rgba(255,255,255,.4); box-shadow:0px 4px 0px #555; padding:.1em;}
+        a {font-family: "Lato", "Helvetica Neue", Arial, sans-serif; color: sienna; text-shadow: 0px 0px 1px rgba(255,255,255,.4); box-shadow:0px 2px 0px #555; padding:.05em;}
+        .side a {color:darkorchid; text-shadow: 0px 0px 1px rgba(255,255,255,.4); box-shadow:0px 4px 0px #555; padding:.1em;}
         form {width:100%}
         .posts hr, br {width:92%; margin:4%}
-        input {padding:1em}
+        input {padding:1em; color: mediumslateblue;}
         input[type=text] {width:92%; margin: 4%; font-size: 2em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
         input[type=number] {width:38%; margin: 4%; font-size: 2em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
-        textarea {width:92%; margin: 4%; font-size: 1.4em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
+        textarea {color: darkslateblue; width:92%; margin: 4%; font-size: 1.4em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
         .posts {width:32%; float:left; background: rgba(255,255,255, .8); margin:.6%}
         .posts input[type=text] { font-size: 1.6em; }
         .posts textarea { font-size: 1.2em; }
@@ -41,7 +42,7 @@
     <script src="irth.js"></script>
 
   <body ng-controller="ctrl">
-    <div style="background:whitesmoke; width:20%; float:left;">
+    <div style="background:whitesmoke; width:20%; float:left;" class="side">
       <div style="float:right; text-align: right; padding:1em; width: 100%; background: #444; color: #aaa">
         <span ng-show="authObj.$getAuth() || authObj.$requireAuth().$$state.value.uid">
           <b>{{ authObj.$getAuth().password.email }} | <a ng-click="authObj.$unauth()">Logout</a></b>
@@ -94,7 +95,7 @@ Activity
         <hr>
         Open Tasks:
         <span ng-repeat="task in syncArray.task">
-          <b ng-show="!task.done === true" ng-click="completeTask(task.$id); newActivity.name = task.name; newActivity.details = task.description" >{{task.name}}<i ng-if="!$last">, </i></b>
+          <b ng-show="!task.done === true" ng-click="completeTask(task.$id); newActivity.name = task.name; newActivity.details = task.description" ><a>{{task.name}}</a><i ng-if="!$last">, </i></b>
         </span>
         <hr>
 
@@ -117,7 +118,7 @@ Activity
             <textarea ng-model="activity.details"></textarea>
           </div>
 
-          <code>{{activity.time}} minutes on {{activity.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('activity',key)"> Remove Task </a></code>
+          <code>{{activity.time}} minutes on {{activity.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('activity',key)"> Remove Task </a></code>
 
           <hr/>
         </div>
@@ -141,7 +142,7 @@ Events
 
             <div ng-if="$parent.syncArray.event[$index] !== $parent.syncArray.event[$index - 1]"><code>{{event.created | date }}</code></div>
           {{event.time}}: <b><input type="text" ng-model="event.name"/></b>
-          <code><span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('event',event.$id)"> Remove Event </a></code>
+          <code><span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('event',event.$id)"> Remove Event </a></code>
 
           <hr/>
         </div>
@@ -181,7 +182,7 @@ Diet
         <div ng-repeat="(key,meal) in diet | limitTo:-100">
           <h4>{{meal.name}}</h4>
           <textarea type="text" ng-model="meal.details"></textarea>
-          <code>{{meal.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('diet',key)"> Remove Meal </a></code>
+          <code>{{meal.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a ` ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('diet',key)"> Remove Meal </a></code>
 
           <hr/>
         </div>
@@ -219,7 +220,7 @@ Exercise
         <div ng-repeat="(key,exercise) in exercise | limitTo:-100">
           <div>{{exercise.time}} Minutes <textarea type="text" ng-model="exercise.details"></textarea></div>
           <div>{{exercise.tags}} | {{exercise.mode}}</div>
-          <code>{{exercise.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('exercise',key)"> Remove Exercise </a></code>
+          <code>{{exercise.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('exercise',key)"> Remove Exercise </a></code>
 
           <hr/>
         </div>
@@ -247,7 +248,7 @@ Day
         <hr>
         <div style="width:100%;margin:none;">
             <div ng-repeat="(key,day) in day | limitTo:-100">
-                <code>{{day.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('day',key)"> Remove day </a></code>
+                <code>{{day.created | date:'MM/dd/yyyy @ h:mma' }}. <span ng-show="!remove" ng-click="remove = true"> [Erase] </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> <a ng-show="remove" ng-click="removeEntry('day',key)"> Remove day </a></code>
               <textarea name="" id="" ng-model="day.recap"></textarea>
               <div ng-repeat="goal in day.goals" ><input type="checkbox" ng-model="goal.done"/>{{goal.name}}</div>
               <hr/>
@@ -281,7 +282,7 @@ Insight
              <textarea type="text" ng-model="insight.note"></textarea>
            </p>
 
-          <span ng-show="!remove" ng-click="remove = true"> X </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('insight',key)"> Erase Insight </a>{{anInsight.created | date }}
+          <span ng-show="!remove" ng-click="remove = true"> X </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('insight',key)"> Erase Insight </a>{{anInsight.created | date }}
         </div>
       </div>
   
@@ -308,7 +309,7 @@ Note
              <textarea type="text" ng-model="note.note"></textarea>
            </p>
 
-          <span ng-show="!remove" ng-click="remove = true"> X </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('note',key)"> Erase Note </a>{{note.created | date }}
+          <span ng-show="!remove" ng-click="remove = true"> X </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('note',key)"> Erase Note </a>{{note.created | date }}
         </div>
       </div>
 <!--
@@ -326,7 +327,7 @@ Tasks
         <h3>Open Tasks</h3>
         <hr/>
         <div ng-show="!task.done === true" class="posts" ng-repeat="(key, task) in task">
-          <b ng-click="completeTask(key)" >{{task.name}}</i></b><textarea ng-model="task.description"></textarea></p>
+          <b ng-click="completeTask(key)" ><a>{{task.name}}</a></i></b><textarea ng-model="task.description"></textarea></p>
         </div>
         <div style="width: 100%; clear: both">
           <hr/>
@@ -334,10 +335,10 @@ Tasks
           <h3>All tasks</h3>
           <hr/>
           <div class="posts" ng-repeat="(key,task) in task">
-            <b style="margin-left: 4%; font-size: 1.4em" ng-click="unCompleteTask(key)" >{{task.name}}</i></b>
+            <b style="margin-left: 4%; font-size: 1.4em" ng-click="unCompleteTask(key)" ><a>{{task.name}}</a></i></b>
             <hr/>
             <textarea ng-model="task.description"></textarea>
-            <span ng-show="!remove" ng-click="remove = true"> X </span><a href ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('task',key)"> Remove Task </a>{{task.created | date }}
+            <span ng-show="!remove" ng-click="remove = true"> X </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('task',key)"> Remove Task </a>{{task.created | date }}
 
           </div>
         </div>
