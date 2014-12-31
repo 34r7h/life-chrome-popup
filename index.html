@@ -44,6 +44,7 @@
   <body ng-controller="ctrl">
     <div style="background:whitesmoke; width:20%; float:left;" class="side">
       <div style="float:right; text-align: right; padding:1em; width: 100%; background: #444; color: #aaa">
+        <h1>Your Life</h1>
         <span ng-show="authObj.$getAuth() || authObj.$requireAuth().$$state.value.uid">
           <b>{{ authObj.$getAuth().password.email }} | <a ng-click="authObj.$unauth()">Logout</a></b>
         </span>
