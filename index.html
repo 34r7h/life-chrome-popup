@@ -3,7 +3,7 @@
 
   <head>
 
-      <title>Tracking Popdown</title>
+      <title>Your Life</title>
     <link rel="stylesheet" href="style.css"/>
   </head>
 
@@ -39,7 +39,7 @@
 
             <div ng-if="life === 'activity'">
               Today's Goals:
-              <b ng-if="($index + 1) === $parent.day.length" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals[0].name}}</b>
+              <b ng-if="$last" ng-repeat="yesterday in $parent.$parent.day ">{{yesterday.goals[0].name}}</b>
               <hr>
               Open Tasks:
                   <span ng-repeat="(key,task) in $parent.task">
