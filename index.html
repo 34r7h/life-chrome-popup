@@ -15,9 +15,10 @@
   <body ng-controller="ctrl">
     <div style="background:whitesmoke; width:20%; float:left;" class="side">
       <div style="float:right; text-align: right; padding:1em; width: 100%; background: #444; color: #aaa">
-        <h1>Your Life</h1>
+        <h1 ng-if="authObj.$getAuth().password.email">{{ authObj.$getAuth().password.email}}Life</h1>
+        <h1 ng-if="!authObj.$getAuth().password.email">yourLife</h1>
         <span ng-show="authObj.$getAuth() || authObj.$requireAuth().$$state.value.uid">
-          <b>{{ authObj.$getAuth().password.email }} | <a ng-click="authObj.$unauth()">Logout</a></b>
+          <b>| <a ng-click="authObj.$unauth()">Logout</a></b>
         </span>
         <form ng-submit="auth(login.email, login.password)" ng-show="location.$$absUrl !== '' && !authObj.$getAuth()">
           <input ng-model="login.email" placeholder="Email"/>
@@ -42,9 +43,12 @@
               <b ng-if="$last" ng-repeat="yesterday in $parent.$parent.day | limitTo:-1 ">{{yesterday.goals}}</b>
               <hr>
               Open Tasks:
-                  <span ng-repeat="(key,task) in $parent.task">
-                    <b ng-show="!task.done === true" ng-click="completeTask(key); $parent.$parent.entry.name = task.name; $parent.$parent.entry.details = task.description" ><a>{{task.name}}</a><i ng-if="!$last">, </i></b>
-                  </span>
+                <ul>
+                  <li ng-show="!task.done === true" ng-repeat="(key,task) in $parent.task">
+                    <b ng-click="completeTask(key); $parent.$parent.entry.name = task.name; $parent.$parent.entry.details = (task.description || task.details )" ><a>{{task.name}}</a> <code>{{task.description || task.details}}</code></b>
+
+                  </li>
+                </ul>
               <hr>
             </div>
 
