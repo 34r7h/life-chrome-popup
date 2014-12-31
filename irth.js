@@ -3,8 +3,8 @@ angular.module('irth', ['firebase'])
 .controller('ctrl', function($scope, $firebase, $firebaseAuth, $location){
 	var dbURL = 'https://yourlife.firebaseio.com/',
 	ref = {}, sync = {}, bind = {}, authRef = new Firebase(dbURL);
-	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note', 'thanks', 'forgive' ];
-	$scope.nav = {body:['diet', 'exercise'], mind:['activity', 'event','task', 'note'], spirit:['day', 'insight', 'thanks', 'forgive']};
+	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note', 'thanks', 'forgive', 'stretch', 'water' ];
+	$scope.nav = {body:['diet', 'exercise', 'stretch', 'water'], mind:['activity', 'event','task', 'note'], spirit:['day', 'insight', 'thanks', 'forgive']};
 	$scope.showLinks = {mind:true};
 	$scope.life = [];
 	$scope.syncArray = {};

@@ -27,7 +27,7 @@
         </form>
       </div>
       <span ng-repeat="(key,linkGroup) in nav">
-        <span style="padding:1em;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></span>
+        <span style="padding:1em; text-align: right;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></span>
         <div><button style="width:100%; padding:.1em" ng-show="showLinks[$parent.key]" ng-repeat="link in linkGroup" ng-click="hideAll(); beGone[link] = ''">{{link}}</button></div>
       </span>
     </div>
