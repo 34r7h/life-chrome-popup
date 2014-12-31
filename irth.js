@@ -75,7 +75,7 @@ angular.module('irth', ['firebase'])
 
 	$scope.completeTask = function(id) {
 		var timestamp = Date.now();
-		sync.task.$update(id, {done:timestamp});
+		sync.task.$update(id, {done:timestamp });
 	};
 	$scope.unCompleteTask = function(id) {
 		var timestamp = Date.now();

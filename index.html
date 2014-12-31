@@ -39,7 +39,7 @@
 
             <div ng-if="life === 'activity'">
               Today's Goals:
-              <b ng-if="$index===0" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals[0].name}}</b>
+              <b ng-if="($index + 1) === $parent.day.length" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals[0].name}}</b>
               <hr>
               Open Tasks:
                   <span ng-repeat="(key,task) in $parent.task">
@@ -110,7 +110,7 @@
           <div class="posts" ng-repeat="(key, entry) in $parent[life]">
             <input ng-if="entry.title" type="text" ng-model="entry.title" />
             <input ng-if="entry.name" type="text" ng-model="entry.name" />
-            <code ng-if="entry.time">{{entry.time}} minutes <i ng-click="entry.time = null">XXX</i></code>
+            <code ng-if="entry.time">{{entry.time}} minutes </code>
             <div ng-if="entry.details || entry.description">
               <label for="details">Details</label>
               <textarea id="details" ng-model="entry.details"></textarea>
@@ -132,8 +132,8 @@
               <textarea id="goals" ng-if="entry.goals" ng-model="entry.goals[0].name"></textarea>
             </div>
             <div ng-if="$parent.life === 'task'">
-              <button ng-show="entry.done===false" ng-click="entry.done=true">Done</button>
-              <a ng-show="entry.done!==false" ng-click="entry.done=false">Task Complete / Renew?</a>
+              <button ng-show="entry.done===false" ng-click="$parent.$parent.$parent.completeTask(key)">Done</button>
+              <a ng-show="entry.done!==false" ng-click="$parent.$parent.$parent.unCompleteTask(key)">Task Complete / Renew?</a>
             </div>
 
             <div ng-if="entry.tags">
