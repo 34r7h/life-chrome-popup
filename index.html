@@ -35,7 +35,7 @@
 
         <div ng-repeat="life in lifestyle" >
           <div style="{{beGone[life]}}">
-          <form id="{{life}}" ng-init="new[life] = {}; entry = new.life" ng-submit="api.add[life](entry); entry={};">
+          <form id="{{life}}" ng-init="new[life] = {name:'',details:''}; entry = new.life" ng-submit="api.add[life](entry); entry={};">
 
             <div ng-if="life === 'activity'">
               Today's Goals:
@@ -43,7 +43,7 @@
               <hr>
               Open Tasks:
                   <span ng-repeat="(key,task) in $parent.task">
-                    <b ng-show="!task.done === true" ng-click="completeTask(key); $parent.entry.name = task.name; $parent.entry.details = task.description" ><a>{{task.name}}</a><i ng-if="!$last">, </i></b>
+                    <b ng-show="!task.done === true" ng-click="completeTask(key); $parent.$parent.entry.name = task.name; $parent.$parent.entry.details = task.description" ><a>{{task.name}}</a><i ng-if="!$last">, </i></b>
                   </span>
               <hr>
             </div>
@@ -111,7 +111,7 @@
             <input ng-if="entry.title" type="text" ng-model="entry.title" />
             <input ng-if="entry.name" type="text" ng-model="entry.name" />
             <code ng-if="entry.time">{{entry.time}} minutes </code>
-            <div ng-if="entry.details || entry.description">
+            <div ng-if="entry.details">
               <label for="details">Details</label>
               <textarea id="details" ng-model="entry.details"></textarea>
             </div>
@@ -151,9 +151,6 @@
             <code>
               {{entry.created | date}}
             </code>
-            <p>
-              Entry: {{entry}}
-            </p>
           </div>
         </div>
       </div>
