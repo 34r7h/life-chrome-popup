@@ -3,8 +3,8 @@ angular.module('irth', ['firebase'])
 .controller('ctrl', function($scope, $firebase, $firebaseAuth, $location){
 	var dbURL = 'https://yourlife.firebaseio.com/',
 	ref = {}, sync = {}, bind = {}, authRef = new Firebase(dbURL);
-	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note' ];
-	$scope.nav = {body:['diet', 'exercise'], mind:['activity', 'event','task', 'note'], spirit:['day', 'insight']};
+	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note', 'thanks', 'forgive' ];
+	$scope.nav = {body:['diet', 'exercise'], mind:['activity', 'event','task', 'note'], spirit:['day', 'insight', 'thanks', 'forgive']};
 	$scope.showLinks = {mind:true};
 	$scope.life = [];
 	$scope.syncArray = {};
@@ -60,6 +60,16 @@ angular.module('irth', ['firebase'])
 		console.log('args', arguments);
 		var timestamp = Date.now();
 		sync.activity.$push({name:name, time:time, details:details, tags:tags, created:timestamp});
+	};
+	$scope.addForgive = function(name, details) {
+		console.log('args', arguments);
+		var timestamp = Date.now();
+		sync.forgive.$push({name:name, details:details, created:timestamp});
+	};
+	$scope.addThanks = function(name, details) {
+		console.log('args', arguments);
+		var timestamp = Date.now();
+		sync.thanks.$push({name:name, details:details, created:timestamp});
 	};
 	var addActivity = function(name, time, details, tags) {
 		var timestamp = Date.now();

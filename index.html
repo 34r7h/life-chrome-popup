@@ -288,6 +288,64 @@ Insight
   
   <!--
 
+Forgive
+
+-->
+      <div style="{{beGone.forgive}}">
+
+        <form id="forgive" ng-submit="addForgive(newForgive.name, newForgive.details); newForgive.name=''; newForgive.details='';">
+          <div>
+            <input type="text" ng-model="newForgive.name" placeholder="Forgive Who or What"/>
+          </div>
+          <div>
+            <textarea type="text" ng-model="newForgive.details" placeholder="Details" ></textarea>
+          </div>
+            <!-- p><a ng-if="$last" ng-click="newForgive.notes[$index + 1] = ' ';">Another Note</a></p -->
+          <div>
+            <button class="submit">Forgive'm</button>
+          </div>
+        </form>
+        <div class="posts" ng-repeat="(key,forgive) in forgive">
+          <div><input type="text" ng-model="forgive.name"/></div>
+           <p>
+             <textarea type="text" ng-model="forgive.details"></textarea>
+           </p>
+
+          <span ng-show="!remove" ng-click="remove = true"> X </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('forgive',key)"> Erase Forgive </a>{{forgive.created | date }}
+        </div>
+      </div>
+  
+  <!--
+
+Thanks
+
+-->
+      <div style="{{beGone.thanks}}">
+
+        <form id="thanks" ng-submit="addThanks(newThanks.name, newThanks.details); newThanks.name=''; newThanks.details='';">
+          <div>
+            <input type="text" ng-model="newThanks.name" placeholder="Thank Who?"/>
+          </div>
+          <div>
+            <textarea type="text" ng-model="newThanks.details" placeholder="Details" ></textarea>
+          </div>
+            <!-- p><a ng-if="$last" ng-click="newThanks.notes[$index + 1] = ' ';">Another Note</a></p -->
+          <div>
+            <button class="submit">Thanks'm</button>
+          </div>
+        </form>
+        <div class="posts" ng-repeat="(key,thanks) in thanks">
+          <div><input type="text" ng-model="thanks.name"/></div>
+           <p>
+             <textarea type="text" ng-model="thanks.details"></textarea>
+           </p>
+
+          <span ng-show="!remove" ng-click="remove = true"> X </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('thanks',key)"> Erase Thanks </a>{{thanks.created | date }}
+        </div>
+      </div>
+  
+  <!--
+
 Note
 
 -->
