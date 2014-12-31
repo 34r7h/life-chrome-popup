@@ -1,43 +1,55 @@
 'use strict';
 angular.module('irth', ['firebase'])
-.controller('ctrl', function($scope, $firebase, $firebaseAuth){
+.controller('ctrl', function($scope, $firebase, $firebaseAuth, $location){
 	var dbURL = 'https://yourlife.firebaseio.com/',
-	ref = {}, sync = {}, bind = {};
-	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task' ];
-
+	ref = {}, sync = {}, bind = {}, authRef = new Firebase(dbURL);
+	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note' ];
+	$scope.nav = {body:['diet', 'exercise'], mind:['activity', 'event','task', 'note'], spirit:['day', 'insight']};
+	$scope.showLinks = {mind:true};
 	$scope.life = [];
 	$scope.syncArray = {};
 	$scope.syncObject = {};
 	$scope.bindObject = {};
 	$scope.beGone = {};
-	angular.forEach($scope.lifestyle, function(life){
-		$scope.beGone[life] = 'display:none';
-		ref[life] = new Firebase(dbURL + '/irth/' + life);
-		sync[life] = $firebase(ref[life]);
-		$scope.syncObject[life] = sync[life].$asObject();
-		bind[life] = sync[life].$asObject();
-		$scope.syncArray[life] = sync[life].$asArray();
-		$scope.bindObject[life] = bind[life].$bindTo($scope, life.toString());
-	});
-	console.log('bond', bind);
-		console.log('$scope.bindObject', $scope.bindObject);
-	$scope.login = function(){
-		var loginRef = new Firebase("https://tezt.firebaseio.com");
-		if(auth){
-			console.log('authData',auth);
-		}
-		console.log('loginRef', loginRef);
-		var auth = $firebaseAuth(loginRef);
-		auth.$authWithOAuthRedirect('google').then(function(authData) {
-			$scope.auth = authData;
-			console.log('Logged in as:', authData.uid);
+	$scope.login = {email:'',password:''};
+		$scope.authObj = $firebaseAuth(authRef);
+	$scope.location = $location;
+
+	$scope.auth = function(email, password){
+		$scope.authObj.$authWithPassword({
+			email: email,
+			password: password
+		}).then(function(authData) {
+			$scope.authData = authData;
+			console.log("Logged in as:", authData.uid);
+			$scope.getData();
+
 		}).catch(function(error) {
-			console.error('Authentication failed: ', error);
+			console.error("Authentication failed:", error);
 		});
-		console.log($scope.auth);
+
 	};
-//	sync.$set('life',{activity:0,diet:0,exercise:0,assess:0});
-	$scope.beGone.activity = '';
+	if($scope.location.$$protocol === 'chrome-extension'){
+		$scope.auth('i@o.io','o');
+		$scope.showLinks = {mind:true};
+
+	}
+
+	$scope.getData = function(){
+		angular.forEach($scope.lifestyle, function(life){
+			$scope.beGone[life] = 'display:none';
+			ref[life] = new Firebase(dbURL + '/irth/' + life);
+			sync[life] = $firebase(ref[life]);
+			$scope.syncObject[life] = sync[life].$asObject();
+			bind[life] = sync[life].$asObject();
+			$scope.syncArray[life] = sync[life].$asArray();
+			$scope.bindObject[life] = bind[life].$bindTo($scope, life.toString());
+		});
+		$scope.beGone.activity = '';
+
+	};
+	$scope.getData();
+
 
 	$scope.hideAll = function () {
 		angular.forEach($scope.lifestyle, function(life){
@@ -71,6 +83,10 @@ angular.module('irth', ['firebase'])
 		var timestamp = Date.now();
 		sync.day.$push({recap:recap, rating:rating, goals:goals, created:timestamp});
 	};
+	$scope.addNote = function(note) {
+		var timestamp = Date.now();
+		sync.note.$push({note:note, created:timestamp});
+	};
 	$scope.addInsight = function(title, note) {
 		console.log(title,note);
 		if(note === undefined){
@@ -101,6 +117,7 @@ angular.module('irth', ['firebase'])
 		sync.task.$update(id, {done:false, undone:timestamp});
 	};
 	$scope.removeEntry = function(type, id) {
+		console.log('removing', type + id);
 		sync[type].$remove(id);
 	};
 
