@@ -35,7 +35,7 @@
 
         <div ng-repeat="life in lifestyle" >
           <div style="{{beGone[life]}}">
-          <form id="{{life}}" ng-init="new[life] = {name:'',details:''}; entry = new.life" ng-submit="api.add[life](entry); entry={};">
+          <form id="{{life}}" ng-init="new[life] = {}; entry = new.life" ng-submit="$parent.api.add[life](entry); entry={};">
 
             <div ng-if="life === 'activity'">
               Today's Goals:
@@ -129,7 +129,8 @@
             <div ng-if="entry.goals">
               <label for="goals">Next day's goals</label>
               <input type="checkbox" ng-model="entry.goals[0].done"/> Achieved
-              <textarea id="goals" ng-if="entry.goals" ng-model="entry.goals[0].name"></textarea>
+              <textarea id="goals" ng-if="entry.goals.name" ng-model="entry.goals.name"></textarea>
+              <textarea id="goals" ng-if="entry.goals[0].name" ng-model="entry.goals[0].name"></textarea>
             </div>
             <div ng-if="$parent.life === 'task'">
               <button ng-show="entry.done===false" ng-click="$parent.$parent.$parent.completeTask(key)">Done</button>
