@@ -50,6 +50,24 @@ angular.module('irth', ['firebase'])
 	};
 	$scope.getData();
 
+		// API
+		$scope.api = {add:{}};
+
+		var addSections = ['activity', 'forgive', 'thanks', 'event', 'diet', 'exercise', 'day', 'note', 'insight', 'task'];
+
+		angular.forEach(addSections, function(section){
+			$scope.api.add[section] = function(submission) {
+				submission.created = Date.now();
+				sync[section].$push(submission);
+			};
+		});
+
+		$scope.removeEntry = function(type, id) {
+			console.log( 'removing', type + ": " + id );
+			sync[type].$remove(id);
+		};
+
+
 
 	$scope.hideAll = function () {
 		angular.forEach($scope.lifestyle, function(life){
@@ -66,10 +84,9 @@ angular.module('irth', ['firebase'])
 		var timestamp = Date.now();
 		sync.forgive.$push({name:name, details:details, created:timestamp});
 	};
-	$scope.addThanks = function(name, details) {
-		console.log('args', arguments);
-		var timestamp = Date.now();
-		sync.thanks.$push({name:name, details:details, created:timestamp});
+	$scope.addThanks = function(submission) {
+		submission.created = Date.now();
+		sync.thanks.$push(submission);
 	};
 	var addActivity = function(name, time, details, tags) {
 		var timestamp = Date.now();
@@ -108,15 +125,10 @@ angular.module('irth', ['firebase'])
 		var timestamp = Date.now();
 		sync.insight.$push({title:title, note:note, created:timestamp});
 	};
-	$scope.addTask = function(name, description) {
-		if(name === undefined){
-			var name = 'unnamed';
-		}
-		if(description === undefined){
-			var description = 'no description';
-		}
-		var timestamp = Date.now();
-		sync.task.$push({name:name, description:description, created:timestamp});
+	$scope.addTask = function(submission) {
+		submission.timestamp = Date.now();
+		var entry = {};
+		sync.task.$push(entry);
 	};
 	$scope.completeTask = function(id) {
 		var timestamp = Date.now();
@@ -126,10 +138,7 @@ angular.module('irth', ['firebase'])
 		var timestamp = Date.now();
 		sync.task.$update(id, {done:false, undone:timestamp});
 	};
-	$scope.removeEntry = function(type, id) {
-		console.log('removing', type + id);
-		sync[type].$remove(id);
-	};
+
 
 		$scope.cLifestyle = [{name:'activity', models:{name: new String(), time: new Number(), details: new String(), tags: new Array() }, methods:{create:$scope.addActivity}}];
 

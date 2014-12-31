@@ -8,6 +8,7 @@
         * {
           font-family: "Helvetica", Arial, sans-serif;
         }
+        h2 {margin: 0}
         body {
           min-width:600px;
           min-height:600px;
@@ -19,13 +20,13 @@
         form {width:100%}
         .posts hr, br {width:92%; margin:4%}
         input {padding:1em; color: mediumslateblue;}
-        input[type=text] {width:92%; margin: 4%; font-size: 2em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
+        input[type=text] {width:92%; margin: 4%; font-size: 1.6em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
         input[type=number] {width:38%; margin: 4%; font-size: 2em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
         textarea {color: darkslateblue; width:92%; margin: 4%; font-size: 1.4em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
         .posts {width:32%; float:left; background: rgba(255,255,255, .8); margin:.6%}
         .posts input[type=text] { font-size: 1.6em; }
         .posts textarea { font-size: 1.2em; }
-        button {font-size: 1.6em; background:#555; color: #ccc}
+        button {font-size: 1.3em; background:#555; color: #ccc}
         button.submit {width:100%;}
       </style>
       <!--
@@ -56,7 +57,7 @@
       </div>
       <span ng-repeat="(key,linkGroup) in nav">
         <span style="padding:1em;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></span>
-        <div><button style="width:100%; padding:.2em" ng-show="showLinks[$parent.key]" ng-repeat="link in linkGroup" ng-click="hideAll(); beGone[link] = ''">{{link}}</button></div>
+        <div><button style="width:100%; padding:.1em" ng-show="showLinks[$parent.key]" ng-repeat="link in linkGroup" ng-click="hideAll(); beGone[link] = ''">{{link}}</button></div>
       </span>
     </div>
 
@@ -66,6 +67,8 @@
 Activity
 
 -->
+
+
 
   <!--div ng-repeat="life in cLifestyle">
     <form id="{{life.name}}" ng-submit="life.methods.create(life.models.name, life.models.time, life.models.details, life.models.tags); life.models.name=''; life.models.time=''; life.models.details=''; life.models.tags=['']" ng-init="life.models.tags = ['']">
@@ -90,16 +93,133 @@ Activity
     </form>
   </div-->
 
-      <div style="{{beGone.activity}}">
-        Today's Goals:
-        <b ng-repeat=" day in syncArray.day | limitTo:-1 ">{{day.goals[0].name}}</b>
-        <hr>
-        Open Tasks:
-        <span ng-repeat="task in syncArray.task">
-          <b ng-show="!task.done === true" ng-click="completeTask(task.$id); newActivity.name = task.name; newActivity.details = task.description" ><a>{{task.name}}</a><i ng-if="!$last">, </i></b>
-        </span>
-        <hr>
 
+        <div ng-repeat="life in lifestyle" >
+          <div style="{{beGone[life]}}">
+          <form id="{{life}}" ng-init="new[life] = {}; entry = new.life" ng-submit="api.add[life](entry); entry={};">
+
+            <div ng-if="life === 'activity'">
+              Today's Goals:
+              <b ng-if="$index===0" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals[0].name}}</b>
+              <hr>
+              Open Tasks:
+                  <span ng-repeat="(key,task) in $parent.task">
+                    <b ng-show="!task.done === true" ng-click="completeTask(key); $parent.entry.name = task.name; $parent.entry.details = task.description" ><a>{{task.name}}</a><i ng-if="!$last">, </i></b>
+                  </span>
+              <hr>
+            </div>
+
+            <div>
+              <input type="text" ng-model="entry.name" placeholder="{{life}} name"/>
+            </div>
+
+            <div>
+              <textarea type="text" ng-model="entry.details" placeholder="{{life}} details" ></textarea>
+            </div>
+
+            <div ng-if="life === 'day'">
+              <textarea type="text" ng-model="entry.recap" placeholder="{{life}} recap" ></textarea>
+              <textarea type="text" ng-model="entry.goals" placeholder="{{life}}-after's goals" ></textarea>
+            </div>
+
+            <div ng-if="life === 'diet'">
+              <div ng-init="nutrition.types = ['protein', 'fats', 'grains', 'legumes', 'fruits', 'vegetables', 'seeds-nuts', 'sugars']; nutrition.amounts = ['none', 'some', 'much', 'many', 'lots']">
+                <table>
+                  <tr>
+                    <th>Nutrition Type</th>
+                    <th>Nutrition Amount</th>
+                  </tr>
+                  <tr ng-repeat="type in nutrition.types">
+                    <td>{{type}}</td>
+                    <td ng-repeat="amount in nutrition.amounts">
+                      <input type="radio" ng-model="entry.nutrition[type]" value="{{amount}}"/>{{amount}}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div ng-if="life === 'exercise'">
+              <div ng-init="mode.types = ['cardio', 'strength', 'HIIT', 'flex']; mode.amounts = ['none', 'little', 'some', 'much', 'MOAR']">
+                <table>
+                  <tr>
+                    <th>Mode Type</th>
+                    <th>Mode Amount</th>
+                  </tr>
+                  <tr ng-repeat="type in mode.types">
+                    <td>{{type}}</td>
+                    <td ng-repeat="amount in mode.amounts">
+                      <input type="radio" ng-model="$parent.$parent.$parent.entry.mode[type]" value="{{amount}}"/>{{amount}}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+              <div ng-init="minutes = ''; hours = '';">
+                <input type="number" ng-model="minutes" placeholder="Minutes" ng-change="entry.time = ((hours * 60) + minutes);"/>
+                <input type="number" ng-model="hours" placeholder="Hours" ng-change="entry.time = ((hours * 60) + minutes);">
+              </div>
+            <input type="text" ng-model="entry.tags" placeholder="Tags"/>
+            <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="entry.quality" ng-options="rating for rating in ratings | uppercase"><option value="">Quality</option></select>
+
+
+            <div>
+              <button class="submit">{{life}}</button>
+            </div>
+          </form>
+
+          <div class="posts" ng-repeat="(key, entry) in $parent[life]">
+            <input ng-if="entry.title" type="text" ng-model="entry.title" />
+            <input ng-if="entry.name" type="text" ng-model="entry.name" />
+            <code ng-if="entry.time">{{entry.time}} minutes <i ng-click="entry.time = null">XXX</i></code>
+            <div ng-if="entry.details || entry.description">
+              <label for="details">Details</label>
+              <textarea id="details" ng-model="entry.details"></textarea>
+            </div>
+            <div ng-if="entry.description">
+              <label for="description">Description</label>
+              <textarea id="description" ng-model="entry.description"></textarea>
+            </div>
+            <div ng-if="entry.recap">
+              <label for="recap">Daily recap</label>
+              <textarea id="recap" ng-model="entry.recap"></textarea>
+            </div>
+            <div ng-if="entry.note">
+              <textarea id="note" ng-model="entry.note"></textarea>
+            </div>
+            <div ng-if="entry.goals">
+              <label for="goals">Next day's goals</label>
+              <input type="checkbox" ng-model="entry.goals[0].done"/> Achieved
+              <textarea id="goals" ng-if="entry.goals" ng-model="entry.goals[0].name"></textarea>
+            </div>
+            <div ng-if="$parent.life === 'task'">
+              <button ng-show="entry.done===false" ng-click="entry.done=true">Done</button>
+              <a ng-show="entry.done!==false" ng-click="entry.done=false">Task Complete / Renew?</a>
+            </div>
+
+            <div ng-if="entry.tags">
+              <input type="text" ng-model="entry.tags"/>
+            </div>
+            <div ng-repeat="(key,mode) in entry.mode track by $index">
+              {{key}}: <input type="text" ng-model="entry.mode[key]"/>
+            </div>
+            <div ng-repeat="(key,nutrition) in entry.nutrition track by $index">
+              {{key}}: <input type="text" ng-model="entry.nutrition[key]"/>
+            </div>
+            <span ng-show="!remove" ng-click="remove = true"> X </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry(life,key)"> Erase Thanks </a>
+            <code>{{entry.created | date}}</code>
+            <p>Entry: {{entry}}
+            </p>
+
+
+          </div>
+
+        </div>
+
+
+</div>
+
+  <div style="{{beGone.activity}}">
         <form id="activity" ng-submit="addActivity(newActivity.name, (newActivity.hours*60+newActivity.minutes), newActivity.details, newActivity.tags); newActivity.name=''; newActivity.time=''; newActivity.hours=''; newActivity.minutes=''; newActivity.details=''; newActivity.tags=['']" ng-init="newActivity.tags = ['']">
           <input type="text" ng-model="newActivity.name" placeholder="Activity"/>
           <input id="time" type="number" ng-model="newActivity.hours" placeholder="Hours"/>
@@ -322,7 +442,8 @@ Thanks
 -->
       <div style="{{beGone.thanks}}">
 
-        <form id="thanks" ng-submit="addThanks(newThanks.name, newThanks.details); newThanks.name=''; newThanks.details='';">
+
+        <form id="thanks" ng-init="newThanks = {}" ng-submit="api.add.thanks(newThanks); newThanks={};">
           <div>
             <input type="text" ng-model="newThanks.name" placeholder="Thank Who?"/>
           </div>
@@ -376,7 +497,7 @@ Tasks
 
 -->
       <div style="{{beGone.task}}">
-          <form name="tasks" id="tasks" ng-submit="addTask(newTask.name, newTask.description); newTask.name=''; newTask.description='';">
+          <form name="tasks" id="tasks" ng-init="newTask={};" ng-submit="addTask(newTask); newTask={};">
             <input type="text" ng-model="newTask.name" placeholder="Name task" />
             <textarea type="text" ng-model="newTask.description" placeholder="Describe task"></textarea>
             <button class="submit">Submit</button>
