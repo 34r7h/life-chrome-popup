@@ -39,7 +39,7 @@
 
             <div ng-if="life === 'activity'">
               Today's Goals:
-              <b ng-if="$last" ng-repeat="yesterday in $parent.$parent.day ">{{yesterday.goals[0].name}}</b>
+              <b ng-if="$last" ng-repeat="yesterday in $parent.$parent.day | limitTo:-1 ">{{yesterday.goals}}</b>
               <hr>
               Open Tasks:
                   <span ng-repeat="(key,task) in $parent.task">
@@ -129,7 +129,7 @@
             <div ng-if="entry.goals">
               <label for="goals">Next day's goals</label>
               <input type="checkbox" ng-model="entry.goals[0].done"/> Achieved
-              <textarea id="goals" ng-if="entry.goals.name" ng-model="entry.goals.name"></textarea>
+              <textarea id="goals" ng-if="entry.goals" ng-model="entry.goals"></textarea>
               <textarea id="goals" ng-if="entry.goals[0].name" ng-model="entry.goals[0].name"></textarea>
             </div>
             <div ng-if="$parent.life === 'task'">
