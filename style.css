@@ -1,0 +1,23 @@
+* {
+    font-family: "Helvetica", Arial, sans-serif;
+}
+h2 {margin: 0}
+body {
+    min-width:600px;
+    min-height:600px;
+    max-width: 100%;
+    background: rgba(245,246,227,.38);
+}
+a {font-family: "Lato", "Helvetica Neue", Arial, sans-serif; color: sienna; text-shadow: 0px 0px 1px rgba(255,255,255,.4); box-shadow:0px 2px 0px #555; padding:.05em;}
+.side a {color:darkorchid; text-shadow: 0px 0px 1px rgba(255,255,255,.4); box-shadow:0px 4px 0px #555; padding:.1em;}
+form {width:100%}
+.posts hr, br {width:92%; margin:4%}
+input {padding:1em; color: mediumslateblue;}
+input[type=text] {width:92%; margin: 4%; font-size: 1.6em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
+input[type=number] {width:38%; margin: 4%; font-size: 2em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
+textarea {color: darkslateblue; width:92%; margin: 4%; font-size: 1.4em; padding:.1em 0; max-height: 100%; background:rgba(255,255,255,.141414); border:none; padding:.1em}
+.posts {width:32%; float:left; background: rgba(255,255,255, .8); margin:.6%}
+.posts input[type=text] { font-size: 1.6em; }
+.posts textarea { font-size: 1.2em; }
+button {font-size: 1.3em; background:#555; color: #ccc}
+button.submit {width:100%;}

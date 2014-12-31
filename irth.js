@@ -11,8 +11,9 @@ angular.module('irth', ['firebase'])
 	$scope.syncObject = {};
 	$scope.bindObject = {};
 	$scope.beGone = {};
+	$scope.api = {add:{}};
 	$scope.login = {email:'',password:''};
-		$scope.authObj = $firebaseAuth(authRef);
+	$scope.authObj = $firebaseAuth(authRef);
 	$scope.location = $location;
 
 	$scope.auth = function(email, password){
@@ -51,11 +52,8 @@ angular.module('irth', ['firebase'])
 	$scope.getData();
 
 		// API
-		$scope.api = {add:{}};
 
-		var addSections = ['activity', 'forgive', 'thanks', 'event', 'diet', 'exercise', 'day', 'note', 'insight', 'task'];
-
-		angular.forEach(addSections, function(section){
+		angular.forEach($scope.lifestyle, function(section){
 			$scope.api.add[section] = function(submission) {
 				submission.created = Date.now();
 				sync[section].$push(submission);
@@ -74,62 +72,7 @@ angular.module('irth', ['firebase'])
 			$scope.beGone[life] = 'display:none';
 		});
 	};
-	$scope.addActivity = function(name, time, details, tags) {
-		console.log('args', arguments);
-		var timestamp = Date.now();
-		sync.activity.$push({name:name, time:time, details:details, tags:tags, created:timestamp});
-	};
-	$scope.addForgive = function(name, details) {
-		console.log('args', arguments);
-		var timestamp = Date.now();
-		sync.forgive.$push({name:name, details:details, created:timestamp});
-	};
-	$scope.addThanks = function(submission) {
-		submission.created = Date.now();
-		sync.thanks.$push(submission);
-	};
-	var addActivity = function(name, time, details, tags) {
-		var timestamp = Date.now();
-		var shipment = {name:name, time: time, details:details, tags:tags, created:timestamp};
-		sync.activity.$push(shipment);
-	};
-	$scope.addEvent = function(name, time) {
-		var timestamp = Date.now();
-		sync.event.$push({name:name, time:time, created:timestamp});
-	};
-	$scope['add'+'Diet'] = function(name, time, nutrition, details, tags) { // todo proof of forming named functions in a loop
-		console.log(name, time, nutrition, details, tags);
-		var timestamp = Date.now();
-		sync.diet.$push({name:name, time:time, nutrition:nutrition, details:details, tags:tags, created:timestamp});
-	};
-	$scope.addExercise = function(time, mode, details, tags) {
-		var timestamp = Date.now();
-		sync.exercise.$push({time:time, mode:mode, details:details, tags:tags, created:timestamp});
-	};
-	$scope.addDay = function(recap, rating, goals) {
-		var timestamp = Date.now();
-		sync.day.$push({recap:recap, rating:rating, goals:goals, created:timestamp});
-	};
-	$scope.addNote = function(note) {
-		var timestamp = Date.now();
-		sync.note.$push({note:note, created:timestamp});
-	};
-	$scope.addInsight = function(title, note) {
-		console.log(title,note);
-		if(note === undefined){
-			var note = 'no note.';
-		}
-		if(title === undefined){
-			var title = 'untitled';
-		}
-		var timestamp = Date.now();
-		sync.insight.$push({title:title, note:note, created:timestamp});
-	};
-	$scope.addTask = function(submission) {
-		submission.timestamp = Date.now();
-		var entry = {};
-		sync.task.$push(entry);
-	};
+
 	$scope.completeTask = function(id) {
 		var timestamp = Date.now();
 		sync.task.$update(id, {done:timestamp});
