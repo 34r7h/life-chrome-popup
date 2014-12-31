@@ -278,7 +278,6 @@ Insight
         </form>
         <div class="posts" ng-repeat="(key,insight) in insight">
           <div><input type="text" ng-model="insight.title"/></div>
-          <hr/>
            <p>
              <textarea type="text" ng-model="insight.note"></textarea>
            </p>
@@ -337,7 +336,6 @@ Tasks
           <hr/>
           <div class="posts" ng-repeat="(key,task) in task">
             <b style="margin-left: 4%; font-size: 1.4em" ng-click="unCompleteTask(key)" ><a>{{task.name}}</a></i></b>
-            <hr/>
             <textarea ng-model="task.description"></textarea>
             <span ng-show="!remove" ng-click="remove = true"> X </span><a  ng-show="remove" ng-click="remove = !remove">Cancel</a> | <a ng-show="remove" ng-click="removeEntry('task',key)"> Remove Task </a>{{task.created | date }}
 
