@@ -40,7 +40,7 @@
 
             <div ng-if="life === 'activity'">
               Today's Goals:
-              <b ng-if="$last" ng-repeat="yesterday in $parent.$parent.day | limitTo:-1 ">{{yesterday.goals}}</b>
+              <b ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</b>
               <hr>
               Open Tasks:
                 <ul>
@@ -61,8 +61,8 @@
             </div>
 
             <div ng-if="life === 'day'">
-              <textarea type="text" ng-model="entry.recap" placeholder="{{life}} recap" ></textarea>
-              <textarea type="text" ng-model="entry.goals" placeholder="{{life}}-after's goals" ></textarea>
+              <textarea type="text" ng-model="$parent.entry.recap" placeholder="{{life}} recap" ></textarea>
+              <textarea type="text" ng-model="$parent.entry.goals" placeholder="{{life}}-after's goals" ></textarea>
             </div>
 
             <div ng-if="life === 'diet'">
