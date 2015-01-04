@@ -14,11 +14,11 @@
 
   <body ng-controller="ctrl">
     <div style="background:whitesmoke; width:20%; float:left;" class="side">
-      <div style="float:right; text-align: right; padding:1em; width: 100%; background: #444; color: #aaa">
+      <div style="float:right; text-align: right; padding:1em; width: 100%; background: #444; color: #aaa; clear: both;">
         <h1 ng-if="authObj.$getAuth().password.email">{{ authObj.$getAuth().password.email}}Life</h1>
         <h1 ng-if="!authObj.$getAuth().password.email">yourLife</h1>
         <span ng-show="authObj.$getAuth() || authObj.$requireAuth().$$state.value.uid">
-          <b>| <a ng-click="authObj.$unauth()">Logout</a></b>
+          <b>| <a ng-click="authObj.$unauth()">Log out</a></b>
         </span>
         <form ng-submit="auth(login.email, login.password)" ng-show="location.$$absUrl !== '' && !authObj.$getAuth()">
           <input ng-model="login.email" placeholder="Email"/>
@@ -26,10 +26,16 @@
           <button type="submit">Login</button>
         </form>
       </div>
-      <span ng-repeat="(key,linkGroup) in nav">
-        <span style="padding:1em; text-align: right;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></span>
-        <div><button style="width:100%; padding:.1em" ng-show="showLinks[$parent.key]" ng-repeat="link in linkGroup" ng-click="hideAll(); beGone[link] = ''">{{link}}</button></div>
-      </span>
+      <div style="padding:1em;" ng-repeat="(key,linkGroup) in nav">
+        <div style="text-align: right;padding:1em 0;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></div>
+        <div style="float: right; clear: both">
+          <i ng-show="showLinks[$parent.key]" ng-repeat="link in linkGroup">
+            <button style="padding:.3em 1.5em .3em 1.8em; float: right; clear: both" ng-click="hideAll(); beGone[link] = ''">{{link}}</button>
+            <br ng-if="$last===true" style="margin:1em 0;"/>
+          </i>
+
+        </div>
+      </div>
     </div>
 
 <div style="width: 79%; float:left; padding-left:1%;">
