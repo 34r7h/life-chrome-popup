@@ -5,12 +5,20 @@ angular.module('irth', ['firebase'])
 	ref = {}, sync = {}, bind = {}, authRef = new Firebase(dbURL);
 	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note', 'thanks', 'forgive', 'stretch', 'water' ];
 	$scope.nav = {body:['diet', 'exercise', 'stretch', 'water'], mind:['activity', 'event','task', 'note'], spirit:['day', 'insight', 'thanks', 'forgive']};
-	$scope.showLinks = {mind:true};
+	$scope.pictures = [
+		'http://i.imgur.com/hsOvM.jpg',
+		'http://a.images.blip.tv/Indiegamemag-PAXEastMarkOfTheNinjaMoGameplay179-507.jpg',
+		'http://www.geekmanifesto.net/wordpress/wp-content/uploads/2013/01/Mark-of-the-Ninja.jpg',
+		'http://pinnaclegameprofiler.com/forum/attachment.php?attachmentid=5545&d=1394829381',
+		'http://1.bp.blogspot.com/-au1Rmty2iV0/UPImcpH-apI/AAAAAAAAQ6Y/KmW3gEBmReY/s1600/6.jpg'
+	];
+		$scope.showLinks = {mind:true};
 	$scope.life = [];
 	$scope.syncArray = {};
 	$scope.syncObject = {};
 	$scope.bindObject = {};
 	$scope.beGone = {};
+	$scope.new = {};
 	$scope.api = {add:{}};
 	$scope.login = {email:'',password:''};
 	$scope.authObj = $firebaseAuth(authRef);
@@ -38,6 +46,7 @@ angular.module('irth', ['firebase'])
 
 	$scope.getData = function(){
 		angular.forEach($scope.lifestyle, function(life){
+			$scope.new[life]={};
 			$scope.beGone[life] = 'display:none';
 			ref[life] = new Firebase(dbURL + '/irth/' + life);
 			sync[life] = $firebase(ref[life]);

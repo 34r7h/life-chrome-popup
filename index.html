@@ -12,11 +12,11 @@
     <script src="bower_components/angularfire/dist/angularfire.js"></script>
     <script src="irth.js"></script>
 
-  <body ng-controller="ctrl">
-    <div style="background:whitesmoke; width:20%; float:left;" class="side">
-      <div style="float:right; text-align: right; padding:1em; width: 100%; background: #444; color: #aaa; clear: both;">
-        <h1 ng-if="authObj.$getAuth().password.email">{{ authObj.$getAuth().password.email}}Life</h1>
-        <h1 ng-if="!authObj.$getAuth().password.email">yourLife</h1>
+  <body ng-controller="ctrl" style="background: url('{{pictures[1]}}') center center fixed">
+    <div class="side">
+      <div style="text-align: center; padding:1em 0; width: 100%; background: rgba(12,3,46,.7); color: #aaa; clear: both;">
+        <b ng-if="authObj.$getAuth().password.email">{{ authObj.$getAuth().password.email}}Life</b>
+        <b ng-if="!authObj.$getAuth().password.email">yourLife</b>
         <span ng-show="authObj.$getAuth() || authObj.$requireAuth().$$state.value.uid">
           <b>| <a ng-click="authObj.$unauth()">Log out</a></b>
         </span>
@@ -25,9 +25,12 @@
           <input ng-model="login.password" type="password" placeholder="password"/>
           <button type="submit">Login</button>
         </form>
+        <hr/>
+        <button style="width:48%;" ng-click="showMenu = !showMenu">M</button>
+        <button style="width:48%;" ng-click="showCurrent = !showCurrent">C</button>
       </div>
-      <div style="padding:1em;" ng-repeat="(key,linkGroup) in nav">
-        <div style="text-align: right;padding:1em 0;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></div>
+      <div style="padding:0em;" ng-repeat="(key,linkGroup) in nav" ng-if="showMenu">
+        <div style="text-align: right; padding:1em 0;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></div>
         <div style="float: right; clear: both">
           <i ng-show="showLinks[$parent.key]" ng-repeat="link in linkGroup">
             <button style="padding:.3em 1.5em .3em 1.8em; float: right; clear: both" ng-click="hideAll(); beGone[link] = ''">{{link}}</button>
@@ -36,39 +39,44 @@
 
         </div>
       </div>
+      <div class="current" ng-if="!showCurrent">
+        <h3>Current Scenario</h3>
+        Today's Goals:
+        <b ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</b>
+        <hr>
+        Open Tasks:
+        <div ng-if="!task.done === true" ng-repeat="(key,task) in $parent.task">
+          <b>
+            <a ng-click="completeTask(key); new.activity.name = task.name; new.activity.details = (task.description || task.details )">{{task.name}}</a>
+            <textarea ng-show="task.description" ng-model="task.description"></textarea>
+            <textarea ng-show="task.details" ng-model="task.details"></textarea>
+          </b>
+        </div>
+        <hr>
+        <div ng-if="$first" ng-repeat="note in $parent.note">
+          Note:
+          <textarea ng-model="note.note"></textarea>
+
+        </div>
+
+      </div>
     </div>
-
-<div style="width: 79%; float:left; padding-left:1%;">
-
+    <div style="width: 79%; float:left; padding-left:1%; float: right;">
         <div ng-repeat="life in lifestyle" >
           <div style="{{beGone[life]}}">
-          <form id="{{life}}" ng-init="new[life] = {}; entry = new.life" ng-submit="$parent.api.add[life](entry); entry={};">
+          <form class="new" id="{{life}}" ng-submit="$parent.api.add[life](new[life]); new[life]={};">
 
-            <div ng-if="life === 'activity'">
-              Today's Goals:
-              <b ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</b>
-              <hr>
-              Open Tasks:
-                <ul>
-                  <li ng-show="!task.done === true" ng-repeat="(key,task) in $parent.task">
-                    <b ng-click="completeTask(key); $parent.$parent.entry.name = task.name; $parent.$parent.entry.details = (task.description || task.details )" ><a>{{task.name}}</a> <code>{{task.description || task.details}}</code></b>
-
-                  </li>
-                </ul>
-              <hr>
+            <div>
+              <input type="text" ng-model="new[life].name" placeholder="{{life}} name"/>
             </div>
 
             <div>
-              <input type="text" ng-model="entry.name" placeholder="{{life}} name"/>
-            </div>
-
-            <div>
-              <textarea type="text" ng-model="entry.details" placeholder="{{life}} details" ></textarea>
+              <textarea type="text" ng-model="new[life].details" placeholder="{{life}} details" ></textarea>
             </div>
 
             <div ng-if="life === 'day'">
-              <textarea type="text" ng-model="$parent.entry.recap" placeholder="{{life}} recap" ></textarea>
-              <textarea type="text" ng-model="$parent.entry.goals" placeholder="{{life}}-after's goals" ></textarea>
+              <textarea type="text" ng-model="$parent.new[life].recap" placeholder="{{life}} recap" ></textarea>
+              <textarea type="text" ng-model="$parent.new[life].goals" placeholder="{{life}}-after's goals" ></textarea>
             </div>
 
             <div ng-if="life === 'diet'">
@@ -81,7 +89,7 @@
                   <tr ng-repeat="type in nutrition.types">
                     <td>{{type}}</td>
                     <td ng-repeat="amount in nutrition.amounts">
-                      <input type="radio" ng-model="entry.nutrition[type]" value="{{amount}}"/>{{amount}}
+                      <input type="radio" ng-model="new[life].nutrition[type]" value="{{amount}}"/>{{amount}}
                     </td>
                   </tr>
                 </table>
@@ -98,18 +106,18 @@
                   <tr ng-repeat="type in mode.types">
                     <td>{{type}}</td>
                     <td ng-repeat="amount in mode.amounts">
-                      <input type="radio" ng-model="$parent.$parent.$parent.entry.mode[type]" value="{{amount}}"/>{{amount}}
+                      <input type="radio" ng-model="$parent.$parent.$parent.new[life].mode[type]" value="{{amount}}"/>{{amount}}
                     </td>
                   </tr>
                 </table>
               </div>
             </div>
               <div ng-init="minutes = ''; hours = '';">
-                <input type="number" ng-model="minutes" placeholder="Minutes" ng-change="entry.time = ((hours * 60) + minutes);"/>
-                <input type="number" ng-model="hours" placeholder="Hours" ng-change="entry.time = ((hours * 60) + minutes);">
+                <input type="number" ng-model="minutes" placeholder="Minutes" ng-change="new[life].time = ((hours * 60) + minutes);"/>
+                <input type="number" ng-model="hours" placeholder="Hours" ng-change="new[life].time = ((hours * 60) + minutes);">
               </div>
-            <input type="text" ng-model="entry.tags" placeholder="Tags"/>
-            <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="entry.quality" ng-options="rating for rating in ratings | uppercase"><option value="">Quality</option></select>
+            <input type="text" ng-model="new[life].tags" placeholder="Tags"/>
+            <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="new[life].quality" ng-options="rating for rating in ratings | uppercase"><option value="">Quality</option></select>
 
 
             <div>
