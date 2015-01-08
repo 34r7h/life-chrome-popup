@@ -26,19 +26,11 @@
           <button type="submit">Login</button>
         </form>
         <hr/>
-        <button style="width:48%;" ng-click="showMenu = !showMenu">M</button>
         <button style="width:48%;" ng-click="showCurrent = !showCurrent">C</button>
-      </div>
-      <div style="padding:0em;" ng-repeat="(key,linkGroup) in nav" ng-if="showMenu">
-        <div style="text-align: right; padding:1em 0;"><h2><a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a></h2></div>
-        <div style="float: right; clear: both">
-          <i ng-show="showLinks[$parent.key]" ng-repeat="link in linkGroup">
-            <button style="padding:.3em 1.5em .3em 1.8em; float: right; clear: both" ng-click="hideAll(); beGone[link] = ''">{{link}}</button>
-            <br ng-if="$last===true" style="margin:1em 0;"/>
-          </i>
+        <button style="width:48%;" ng-click="showMenu = !showMenu">M</button>
 
-        </div>
       </div>
+
       <div class="current" ng-if="!showCurrent">
         <h3>Current Scenario</h3>
         Today's Goals:
@@ -47,7 +39,7 @@
         Open Tasks:
         <div ng-if="!task.done === true" ng-repeat="(key,task) in $parent.task">
           <b>
-            <a ng-click="completeTask(key); new.activity.name = task.name; new.activity.details = (task.description || task.details )">{{task.name}}</a>
+            <a ng-click="completeTask(key); new.activity.name = task.name; new.activity.tags = task.tags; new.activity.details = (task.description || task.details )">{{task.name}}</a>
             <textarea ng-show="task.description" ng-model="task.description"></textarea>
             <textarea ng-show="task.details" ng-model="task.details"></textarea>
           </b>
@@ -62,6 +54,19 @@
       </div>
     </div>
     <div style="width: 79%; float:left; padding-left:1%; float: right;">
+      <div style="text-align:center; padding:0em;overflow: visible; width:33%; float:left" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
+        <div style="position:relative; padding:1em 0; ">
+          <h2 style="position:fixed;  background: rgba(239,221,249,.61); text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)">
+            <a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a>
+          </h2>
+        </div>
+        <div style="float: left; position:relative; width: 33%;">
+          <div ng-show="!showLinks[$parent.key]" ng-repeat="link in linkGroup" style="padding:.38em;">
+            <a style="position:relative; text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)" ng-click="hideAll(); beGone[link] = ''"><div style="position:fixed; background: rgba(239,221,249,.38); font-size: 1.4em;  ">{{link}}</div></a>
+          </div>
+
+        </div>
+      </div>
         <div ng-repeat="life in lifestyle" >
           <div style="{{beGone[life]}}">
           <form class="new" id="{{life}}" ng-submit="$parent.api.add[life](new[life]); new[life]={};">

@@ -12,7 +12,7 @@ angular.module('irth', ['firebase'])
 		'http://pinnaclegameprofiler.com/forum/attachment.php?attachmentid=5545&d=1394829381',
 		'http://1.bp.blogspot.com/-au1Rmty2iV0/UPImcpH-apI/AAAAAAAAQ6Y/KmW3gEBmReY/s1600/6.jpg'
 	];
-		$scope.showLinks = {mind:true};
+		$scope.showLinks = {mind:true,body:true,spirit:true};
 	$scope.life = [];
 	$scope.syncArray = {};
 	$scope.syncObject = {};
@@ -40,7 +40,7 @@ angular.module('irth', ['firebase'])
 	};
 	if($scope.location.$$protocol === 'chrome-extension'){
 		$scope.auth('i@o.io','o');
-		$scope.showLinks = {mind:true};
+		$scope.showLinks = {};
 
 	}
 
