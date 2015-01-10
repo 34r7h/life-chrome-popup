@@ -48,7 +48,7 @@
       </div>
     </div>
     <div ng-init="show.note.big = $parent.show.note.big; newNote={}; newNote.note = note.note;" ng-style="style.note" ng-if="$first" ng-repeat="note in note" ng-hide="hide.note">
-      <button ng-click="$parent.api.add.note(newNote)" >{{newNote}}</button>
+      <button ng-click="$parent.api.add.note(newNote); newNote.note = note.note;" >Save Note</button>
       <textarea ng-style="{height:'inherit', width:'inherit', minHeight:'300px', minWidth:'300px', margin:'1%'}" ng-model="note.note"></textarea>
     </div>
     <div ng-style="{position:'fixed', bottom:0, left: 0}">
