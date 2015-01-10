@@ -64,7 +64,8 @@ angular.module('irth', ['firebase'])
 		// API
 
 		angular.forEach($scope.lifestyle, function(section){
-
+			// Loop through the lifestyle array
+			// and create a method on api.add for each section
 			$scope.api.add[section] = function(submission) {
 				var time = Date.now();
 				submission.created = time;
