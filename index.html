@@ -136,7 +136,7 @@
           <div class="posts" ng-repeat="(key, entry) in $parent[life]">
             <input ng-if="entry.title" type="text" ng-model="entry.title" />
             <input ng-if="entry.name" type="text" ng-model="entry.name" />
-            <button ng-click="$parent.new[life] = entry; ">Duplicate {{life}} = {{entry}}</button>
+            <button ng-click="$parent.new[life] = entry; ">Duplicate {{life}}</button>
             <code ng-if="entry.time">{{entry.time}} minutes </code>
             <div ng-if="entry.details">
               <label for="details">Details</label>

@@ -1,4 +1,1 @@
-Common Terminal Commands
-------------------------
-
-firebase deploy
+All rights reserved.
