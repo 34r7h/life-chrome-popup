@@ -68,9 +68,7 @@ angular.module('irth', ['firebase'])
 			$scope.api.add[section] = function(submission) {
 				var time = Date.now();
 				submission.created = time;
-				setTimeout(function(){
-					sync[section].$push(submission);
-				},0)
+				sync[section].$push(submission);
 			};
 		});
 
