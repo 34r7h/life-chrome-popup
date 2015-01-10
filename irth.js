@@ -12,7 +12,10 @@ angular.module('irth', ['firebase'])
 		'http://pinnaclegameprofiler.com/forum/attachment.php?attachmentid=5545&d=1394829381',
 		'http://1.bp.blogspot.com/-au1Rmty2iV0/UPImcpH-apI/AAAAAAAAQ6Y/KmW3gEBmReY/s1600/6.jpg'
 	];
-		$scope.showLinks = {mind:true,body:true,spirit:true};
+	$scope.style = {};
+	$scope.style.note = {position:'fixed', bottom: 0, left:0, width:'300px', minHeight: '300px', margin: '0.7%'};
+	$scope.show = {note:{big:true}};
+	$scope.showLinks = {mind:true,body:true,spirit:true};
 	$scope.life = [];
 	$scope.syncArray = {};
 	$scope.syncObject = {};
@@ -23,7 +26,6 @@ angular.module('irth', ['firebase'])
 	$scope.login = {email:'',password:''};
 	$scope.authObj = $firebaseAuth(authRef);
 	$scope.location = $location;
-
 	$scope.auth = function(email, password){
 		$scope.authObj.$authWithPassword({
 			email: email,
@@ -41,7 +43,6 @@ angular.module('irth', ['firebase'])
 	if($scope.location.$$protocol === 'chrome-extension'){
 		$scope.auth('i@o.io','o');
 		$scope.showLinks = {};
-
 	}
 
 	$scope.getData = function(){
@@ -63,9 +64,13 @@ angular.module('irth', ['firebase'])
 		// API
 
 		angular.forEach($scope.lifestyle, function(section){
+
 			$scope.api.add[section] = function(submission) {
-				submission.created = Date.now();
-				sync[section].$push(submission);
+				var time = Date.now();
+				submission.created = time;
+				setTimeout(function(){
+					sync[section].$push(submission);
+				},0)
 			};
 		});
 

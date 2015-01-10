@@ -4,6 +4,7 @@
   <head>
 
       <title>Your Life</title>
+    <meta http-equiv = 'Content-Language' content = 'en'/>
     <link rel="stylesheet" href="style.css"/>
   </head>
 
@@ -32,11 +33,11 @@
       </div>
 
       <div class="current" ng-if="!showCurrent">
-        <h3>Current Scenario</h3>
-        Today's Goals:
-        <b ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</b>
+        <h3>Mission</h3>
+
+        <span ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</span>
         <hr>
-        Open Tasks:
+        <h4>Objectives</h4>
         <div ng-if="!task.done === true" ng-repeat="(key,task) in $parent.task">
           <b>
             <a ng-click="completeTask(key); new.activity.name = task.name; new.activity.tags = task.tags; new.activity.details = (task.description || task.details )">{{task.name}}</a>
@@ -44,14 +45,16 @@
             <textarea ng-show="task.details" ng-model="task.details"></textarea>
           </b>
         </div>
-        <hr>
-        <div ng-if="$first" ng-repeat="note in $parent.note">
-          Note:
-          <textarea ng-model="note.note"></textarea>
-
-        </div>
-
       </div>
+    </div>
+    <div ng-init="show.note.big = $parent.show.note.big; newNote={}; newNote.note = note.note;" ng-style="style.note" ng-if="$first" ng-repeat="note in note" ng-hide="hide.note">
+      <button ng-click="$parent.api.add.note(newNote)" >{{newNote}}</button>
+      <textarea ng-style="{height:'inherit', width:'inherit', minHeight:'300px', minWidth:'300px', margin:'1%'}" ng-model="note.note"></textarea>
+    </div>
+    <div ng-style="{position:'fixed', bottom:0, left: 0}">
+      <button ng-click="style.note.height = '100%'; style.note.width = '100%'; show.note.big = !show.note.big;" ng-show="show.note.big">Big</button>
+      <button ng-click="style.note.height = '200px'; style.note.width = '200px'; show.note.big = !show.note.big;" ng-show="!show.note.big">Small</button>
+      <button ng-click="hide.note = !hide.note"><span ng-show="!hide.note">Hide</span><span ng-show="hide.note">Note</span></button>
     </div>
     <div style="width: 79%; float:left; padding-left:1%; float: right;">
       <div style="text-align:center; padding:0em;overflow: visible; width:33%; float:left" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
@@ -72,7 +75,7 @@
           <form class="new" id="{{life}}" ng-submit="$parent.api.add[life](new[life]); new[life]={};">
 
             <div>
-              <input type="text" ng-model="new[life].name" placeholder="{{life}} name"/>
+              <input type="text" ng-model="new[life].name" placeholder="{{life}} name" x-webkit-speech="true"/>
             </div>
 
             <div>
@@ -133,6 +136,7 @@
           <div class="posts" ng-repeat="(key, entry) in $parent[life]">
             <input ng-if="entry.title" type="text" ng-model="entry.title" />
             <input ng-if="entry.name" type="text" ng-model="entry.name" />
+            <button ng-click="$parent.new[life] = entry; ">Duplicate {{life}} = {{entry}}</button>
             <code ng-if="entry.time">{{entry.time}} minutes </code>
             <div ng-if="entry.details">
               <label for="details">Details</label>
