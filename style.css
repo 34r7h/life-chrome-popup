@@ -24,7 +24,7 @@ select {float:right; margin: 2em}
 .posts {width:32%; float:left; background: rgba(255,255,255, .8); margin:.6%}
 .posts input[type=text] { max-width: 90%; font-size: 1.2em; }
 .posts textarea { font-size: 1em; }
-button  {font-size: 1em; background:rgba(5,15,22, .8); color: rgba(238,227,251, .8)}
+button  {font-size: 1em; background:rgba(5,15,22, .8); color: rgba(238,227,251, .8); min-height: 50px;}
 button.submit {width:100%;}
 
 .new input, .new textarea {margin:10px; font-size: 1.2em; padding:1em; background:rgba(235,245,240,.282828); color:rgba(255,245,240,.8); text-shadow: -2px 2px 2px rgba(0,25,50,.4)}

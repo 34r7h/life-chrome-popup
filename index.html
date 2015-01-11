@@ -27,17 +27,17 @@
           <button type="submit">Login</button>
         </form>
         <hr/>
-        <button style="width:48%;" ng-click="showCurrent = !showCurrent">C</button>
-        <button style="width:48%;" ng-click="showMenu = !showMenu">M</button>
+        <button style="width:48%;" ng-click="showCurrent = !showCurrent">Mission</button>
+        <button style="width:48%;" ng-click="showMenu = !showMenu">Nav</button>
 
       </div>
 
       <div class="current" ng-if="!showCurrent">
-        <h3>Mission</h3>
+        <h2>Mission</h2>
 
         <span ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</span>
         <hr>
-        <h4>Objectives</h4>
+        <h3>Objectives</h3>
         <div ng-if="!task.done === true" ng-repeat="(key,task) in $parent.task">
           <b>
             <a ng-click="completeTask(key); new.activity.name = task.name; new.activity.tags = task.tags; new.activity.details = (task.description || task.details )">{{task.name}}</a>
@@ -57,15 +57,16 @@
       <button ng-click="hide.note = !hide.note"><span ng-show="!hide.note">Hide</span><span ng-show="hide.note">Note</span></button>
     </div>
     <div style="width: 79%; float:left; padding-left:1%; float: right;">
-      <div style="text-align:center; padding:0em;overflow: visible; width:33%; float:left" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
+      <div style="text-align:center; padding:0em;overflow: visible; width:33%; float:left; margin-top:-20px" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
         <div style="position:relative; padding:1em 0; ">
           <h2 style="position:fixed;  background: rgba(239,221,249,.61); text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)">
             <a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a>
           </h2>
         </div>
-        <div style="float: left; position:relative; width: 33%;">
-          <div ng-show="!showLinks[$parent.key]" ng-repeat="link in linkGroup" style="padding:.38em;">
-            <a style="position:relative; text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)" ng-click="hideAll(); beGone[link] = ''"><div style="position:fixed; background: rgba(239,221,249,.38); font-size: 1.4em;  ">{{link}}</div></a>
+        <div style="float: left; position:relative;">
+          <div ng-show="!showLinks[$parent.key]" ng-repeat="link in linkGroup" style="padding:1.4em;">
+            <a style="position:relative; text-shadow: 2px 3px 3px rgba(244, 236, 251, .97)" ng-click="hideAll(); beGone[link] = ''"><button style="position:fixed; background: rgba(239,221,249,.38); font-size: 1.4em; width:15%; float:left clear: both;
+margin: -1em 2em;">{{link}}</button></a>
           </div>
 
         </div>
@@ -120,7 +121,7 @@
                 </table>
               </div>
             </div>
-              <div ng-init="mode.minutes = ''; mode.hours = '';">
+              <div ng-init="mode.minutes = mode.time; mode.hours = '';">
                 <input type="number" ng-model="mode.minutes" placeholder="Minutes" ng-change="new[life].time = ((mode.hours * 60) + mode.minutes);"/>
                 <input type="number" ng-model="mode.hours" placeholder="Hours" ng-change="new[life].time = ((mode.hours * 60) + mode.minutes);">
               </div>
@@ -132,11 +133,10 @@
               <button class="submit">{{life}}</button>
             </div>
           </form>
-
-          <div class="posts" ng-repeat="(key, entry) in $parent[life]">
+            <a style="float:right" href="" ng-click="pastEntries = ! pastEntries">Past Entries</a>
+          <div ng-if="pastEntries" class="posts" ng-repeat="(key, entry) in $parent[life]">
             <input ng-if="entry.title" type="text" ng-model="entry.title" />
             <input ng-if="entry.name" type="text" ng-model="entry.name" />
-            <button ng-click="$parent.new[life] = copy(entry); ">Duplicate {{life}}</button>
             <code ng-if="entry.time">{{entry.time}} minutes </code>
             <div ng-if="entry.details">
               <label for="details">Details</label>
@@ -177,8 +177,11 @@
             <a  ng-show="remove" ng-click="remove = !remove">Cancel</a> |
             <a ng-show="remove" ng-click="removeEntry(life,key)"> Kick it! </a>
             <code>
-              {{entry.created | date}}
+              {{entry.created | date:['shortTime']}}
+              {{entry.created | date:['mediumDate']}}
             </code>
+            <button ng-click="$parent.new[life] = copy(entry); ">Duplicate {{life}}</button>
+
           </div>
         </div>
       </div>
