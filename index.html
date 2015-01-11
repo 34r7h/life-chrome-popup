@@ -120,9 +120,9 @@
                 </table>
               </div>
             </div>
-              <div ng-init="minutes = ''; hours = '';">
-                <input type="number" ng-model="minutes" placeholder="Minutes" ng-change="new[life].time = ((hours * 60) + minutes);"/>
-                <input type="number" ng-model="hours" placeholder="Hours" ng-change="new[life].time = ((hours * 60) + minutes);">
+              <div ng-init="mode.minutes = ''; mode.hours = '';">
+                <input type="number" ng-model="mode.minutes" placeholder="Minutes" ng-change="new[life].time = ((mode.hours * 60) + mode.minutes);"/>
+                <input type="number" ng-model="mode.hours" placeholder="Hours" ng-change="new[life].time = ((mode.hours * 60) + mode.minutes);">
               </div>
             <input type="text" ng-model="new[life].tags" placeholder="Tags"/>
             <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="new[life].quality" ng-options="rating for rating in ratings | uppercase"><option value="">Quality</option></select>
@@ -136,7 +136,7 @@
           <div class="posts" ng-repeat="(key, entry) in $parent[life]">
             <input ng-if="entry.title" type="text" ng-model="entry.title" />
             <input ng-if="entry.name" type="text" ng-model="entry.name" />
-            <button ng-click="$parent.new[life] = entry; ">Duplicate {{life}}</button>
+            <button ng-click="$parent.new[life] = copy(entry); ">Duplicate {{life}}</button>
             <code ng-if="entry.time">{{entry.time}} minutes </code>
             <div ng-if="entry.details">
               <label for="details">Details</label>

@@ -78,6 +78,10 @@ angular.module('irth', ['firebase'])
 			sync[type].$remove(id);
 		};
 
+		$scope.copy = function(entry) {
+			return angular.copy(entry);
+		};
+
 
 
 	$scope.hideAll = function () {
