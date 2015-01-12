@@ -13,7 +13,7 @@
     <script src="bower_components/angularfire/dist/angularfire.js"></script>
     <script src="irth.js"></script>
 
-  <body ng-controller="ctrl" style="background: url('{{pictures[2]}}') center center fixed">
+  <body ng-init="backgroundImg = getPicture()" ng-controller="ctrl" style="background: url('{{backgroundImg}}') center center fixed">
     <div class="side">
       <div style="text-align: center; padding:1em 0; width: 100%; background: rgba(12,3,46,.7); color: #aaa; clear: both;">
         <b ng-if="authObj.$getAuth().password.email">{{ authObj.$getAuth().password.email}}Life</b>
@@ -27,7 +27,7 @@
           <button type="submit">Login</button>
         </form>
         <hr/>
-        <button style="width:48%;" ng-click="showCurrent = !showCurrent">Mission</button>
+        <button style="width:48%;" ng-click="showCurrent = !showCurrent">Now</button>
         <button style="width:48%;" ng-click="showMenu = !showMenu">Nav</button>
 
       </div>
@@ -56,8 +56,8 @@
     <div ng-style="{position:'fixed', bottom:0, left: 0, zIndex:1001}">
       <button ng-click="hide.note = !hide.note"><span ng-show="hide.note">Hide</span><span ng-show="!hide.note">Note</span></button>
     </div>
-    <div style="width: 79%;padding-left:1%; float: right;">
-      <div style="text-align:center; padding:0em;overflow: visible; width:33%; float:right; margin-top:-20px" ng-repeat="(key,linkGroup) in nav" ng-if="showMenu">
+    <div style="width: 79%; padding-left:1%; float: right;">
+      <div style="text-align:center; height: 62px; padding:0em;overflow: visible; width:33%; float:right; margin-top:-20px" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
         <div style="position:relative; padding:1em 0; ">
           <span style="position:fixed; background: rgba(239,221,249,.61); text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)">
             <a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a>
@@ -65,7 +65,7 @@
         </div>
         <div style="position:fixed;">
           <span  ng-show="!showLinks[$parent.key]" ng-repeat="link in linkGroup">
-            <a style="text-shadow: 2px 3px 3px rgba(244, 236, 251, .97)!important;" ng-click="hideAll(); beGone[link] = ''"><button>{{link}}</button></a>
+            <span style="text-shadow: 2px 3px 3px rgba(244, 236, 251, .97)!important;" ng-click="hideAll(); beGone[link] = ''"><button style="height:3em">{{link}}</button></span>
           </span>
 
         </div>
@@ -74,11 +74,11 @@
           <div style="{{beGone[life]}}">
           <form class="new" id="{{life}}" ng-submit="$parent.api.add[life](new[life]); new[life]={};">
 
-            <div>
+            <div ng-if="life !== 'day' && life !== 'water'">
               <input type="text" ng-model="new[life].name" placeholder="{{life}} name" x-webkit-speech="true"/>
             </div>
 
-            <div>
+            <div ng-if="life !== 'day' && life !== 'water'">
               <textarea type="text" ng-model="new[life].details" placeholder="{{life}} details" ></textarea>
             </div>
 
@@ -86,50 +86,64 @@
               <textarea type="text" ng-model="$parent.new[life].recap" placeholder="{{life}} recap" ></textarea>
               <textarea type="text" ng-model="$parent.new[life].goals" placeholder="{{life}}-after's goals" ></textarea>
             </div>
+            <div ng-if="life === 'water'">
+              <input type="number" ng-model="$parent.new[life].milliliters" placeholder="You're drunk, go home. in ml"/>
+            </div>
 
             <div ng-if="life === 'diet'">
-              <div class="multichoice" ng-init="nutrition.types = ['protein', 'fats', 'grains', 'legumes', 'fruits', 'vegetables', 'seeds-nuts', 'sugars']; nutrition.amounts = ['none', 'some', 'much', 'many', 'lots']">
+              <div class="multichoice" ng-init="nutrition.types = ['protein', 'fats', 'grains', 'legumes', 'fruits', 'vegetables', 'seeds-nuts', 'sugars']; nutrition.amounts = [1,2,3,4,5]">
                 <table>
-                  <tr>
-                    <th>Nutrition Type</th>
-                    <th>Nutrition Amount</th>
-                  </tr>
+
                   <tr ng-repeat="type in nutrition.types">
-                    <td>{{type}}</td>
-                    <td ng-repeat="amount in nutrition.amounts">
-                      <input type="radio" ng-model="new[life].nutrition[type]" value="{{amount}}"/>{{amount}}
+                    <td>
+                      <b>{{type}}</b>
                     </td>
+                    <td ng-repeat="amount in nutrition.amounts" style="text-align: center">
+                      <label for="{{$parent.type+amount}}"><b>{{amount}}</b></label>
+                      <input id="{{$parent.type+amount}}" type="radio" ng-model="new[life].nutrition[type]" value="{{amount}}"/>
+                      <hr/>
+                    </td>
+
                   </tr>
                 </table>
               </div>
             </div>
 
             <div ng-if="life === 'exercise'">
-              <div class="multichoice" ng-init="mode.types = ['cardio', 'strength', 'HIIT', 'flex']; mode.amounts = ['none', 'little', 'some', 'much', 'MOAR']">
+              <div class="multichoice" ng-init="mode.types = ['cardio', 'strength', 'HIIT', 'flex']; mode.amounts = [1,2,3,4,5]">
                 <table>
-                  <tr>
-                    <th>Mode Type</th>
-                    <th>Mode Amount</th>
-                  </tr>
+
                   <tr ng-repeat="type in mode.types">
-                    <td>{{type}}</td>
-                    <td ng-repeat="amount in mode.amounts">
-                      <input type="radio" ng-model="$parent.$parent.$parent.new[life].mode[type]" value="{{amount}}"/>{{amount}}
+                    <td><b>{{type}}</b></td>
+                    <td ng-repeat="amount in mode.amounts" style="text-align: center">
+                        <label for="{{$parent.type + amount}}"><b>{{amount}}</b></label>
+                        <input id="{{$parent.type + amount}}" type="radio" ng-model="$parent.$parent.$parent.new[life].mode[type]" value="{{amount}}"/>
+                      <hr/>
                     </td>
                   </tr>
                 </table>
               </div>
             </div>
-              <div ng-init="mode.minutes = mode.time; mode.hours = '';">
-                <input type="number" ng-model="mode.minutes" placeholder="Minutes" ng-change="new[life].time = ((mode.hours * 60) + mode.minutes);"/>
-                <input type="number" ng-model="mode.hours" placeholder="Hours" ng-change="new[life].time = ((mode.hours * 60) + mode.minutes);">
-              </div>
-            <input type="text" ng-model="new[life].tags" placeholder="Tags"/>
-            <select ng-init="ratings = ['great', 'good', 'average', 'bleh', 'shitty']" ng-model="new[life].quality" ng-options="rating for rating in ratings | uppercase"><option value="">Quality</option></select>
-
+            <div
+                    ng-if="life !== 'day' && life !== 'event' && life !== 'insight' && life !== 'water' && life !== 'diet' && life !== 'task' && life !== 'note'">
+              <input type="number" ng-model="new[life].minutes" placeholder="Minutes" ng-change="new[life].time = ((new[life].hours * 60) + new[life].minutes);"/>
+              <input type="number" ng-model="new[life].hours" placeholder="Hours" ng-change="new[life].time = ((new[life].hours * 60) + new[life].minutes);">
+            </div>
+            <input
+                    ng-if="life !== 'day' && life !== 'water'"
+                    type="text"
+                    ng-model="new[life].tags"
+                    placeholder="Tags"/>
+            <select
+                    ng-init="ratings = ['5', '4', '3', '2', '1']"
+                    ng-if="life !== 'water'"
+                    ng-model="new[life].quality"
+                    ng-options="rating for rating in ratings | uppercase">
+              <option value="">Rate the {{life}}</option>
+            </select>
 
             <div>
-              <button class="submit"><h1>{{life}}</h1></button>
+              <button class="submit"><h1>Add {{life}}</h1></button>
             </div>
           </form>
             <hr/>
@@ -156,9 +170,11 @@
               <div ng-if="entry.note">
                 <textarea id="note" ng-model="entry.note"></textarea>
               </div>
+              <div ng-if="entry.milliliters">
+                <input ng-model="entry.milliliters"/>
+              </div>
               <div ng-if="entry.goals">
                 <label for="goals">Next day's goals</label>
-                <input type="checkbox" ng-model="entry.goals[0].done"/> Achieved
                 <textarea id="goals" ng-if="entry.goals" ng-model="entry.goals"></textarea>
                 <textarea id="goals" ng-if="entry.goals[0].name" ng-model="entry.goals[0].name"></textarea>
               </div>
@@ -178,15 +194,14 @@
               </div>
               <hr/>
             </div>
-
-            <button ng-show="!remove" ng-click="remove = true">x</button>
-            <a  ng-show="remove" ng-click="remove = !remove">Cancel</a> |
-            <button ng-show="remove" ng-click="removeEntry(life,key)"> Kick it! </button>
             <code>
               {{entry.created | date:['shortTime']}}
               {{entry.created | date:['mediumDate']}}
             </code>
             <div style="">
+              <button ng-show="!remove" ng-click="remove = true">x</button>
+              <a  ng-show="remove" ng-click="remove = !remove">Cancel</a> |
+              <button ng-show="remove" ng-click="removeEntry(life,key)"> Kick it! </button>
               <button style="float:right;" ng-click="$parent.new[life] = copy(entry);">Copy +</button>
               <button style="float:right;" ng-show="!showFullEntry" ng-click="showFullEntry = !showFullEntry">More</button>
               <button style="float:right;" ng-show="showFullEntry" ng-click="showFullEntry = !showFullEntry">Less</button>

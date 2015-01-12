@@ -6,12 +6,22 @@ angular.module('irth', ['firebase'])
 	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note', 'water' ];
 	$scope.nav = {body:['diet', 'exercise', 'water'], mind:['activity', 'task', 'note'], spirit:['day', 'insight', 'event']};
 	$scope.pictures = [
-		'http://i.imgur.com/hsOvM.jpg',
-		'http://a.images.blip.tv/Indiegamemag-PAXEastMarkOfTheNinjaMoGameplay179-507.jpg',
-		'http://www.geekmanifesto.net/wordpress/wp-content/uploads/2013/01/Mark-of-the-Ninja.jpg',
-		'http://pinnaclegameprofiler.com/forum/attachment.php?attachmentid=5545&d=1394829381',
-		'http://1.bp.blogspot.com/-au1Rmty2iV0/UPImcpH-apI/AAAAAAAAQ6Y/KmW3gEBmReY/s1600/6.jpg'
+		'http://www.emahomagazine.com/wp-content/uploads/2013/04/%E7%BA%A2%E8%89%B2%E4%BC%A0%E8%AF%B42-Red-No.2.jpg',
+		'http://wallpaperest.com/wallpapers/abstract-yellow-and-orange_325759.jpg',
+		'http://goldbinaryoption.com/wp-content/uploads/2014/01/g2.jpg',
+		'http://globe-views.com/dcim/dreams/green/green-05.jpg',
+		'http://upload.wikimedia.org/wikipedia/commons/5/5a/Blue_Bunny.jpg',
+		'http://fc00.deviantart.net/fs71/i/2010/270/9/9/purple_indigo_violet_by_aspartamee-d2zm8e3.jpg',
+		'http://www.thierrybisch.com/edition/pop_prints/images_en/LION/LION-VIOLET.jpg',
+		'http://www.geekmanifesto.net/wordpress/wp-content/uploads/2013/01/Mark-of-the-Ninja.jpg'
 	];
+	$scope.getPicture = function(){
+		var randomNumber = Math.floor(Math.random() * $scope.pictures.length);
+		console.log(randomNumber);
+		var randomImage = $scope.pictures[randomNumber];
+		console.log(randomImage);
+		return randomImage;
+	};
 	$scope.style = {};
 	$scope.style.note = {position:'fixed', bottom: 0, left:0, width:'300px', minHeight: '300px', margin: '0 0.7%', zIndex:0};
 	$scope.show = {note:{big:true}};
