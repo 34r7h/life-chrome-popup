@@ -33,7 +33,7 @@
       </div>
 
       <div class="current" ng-if="!showCurrent">
-        <h2>Mission</h2>
+        <h2>Today</h2>
 
         <span ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</span>
         <hr>
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div ng-init="show.note.big = $parent.show.note.big; newNote={}; newNote.note = note.note;" ng-style="style.note" ng-if="$first" ng-repeat="note in note" ng-hide="hide.note">
-      <button ng-click="$parent.api.add.note(newNote); newNote.note = note.note;" >Save Note</button>
+      <button ng-click="$parent.api.add.note(newNote); newNote.note = note.note;" style="position: absolute; right:-33px">Save</button>
       <textarea ng-style="{height:'inherit', width:'inherit', minHeight:'300px', minWidth:'300px', margin:'0 1%', padding:'5%', borderRadius:'10%'}"ng-model="note.note"></textarea>
     </div>
     <div ng-style="{position:'fixed', bottom:0, left: 0}">
@@ -179,7 +179,7 @@
               {{entry.created | date:['shortTime']}}
               {{entry.created | date:['mediumDate']}}
             </code>
-            <button ng-click="$parent.new[life] = copy(entry); ">Duplicate {{life}}</button>
+            <div><a ng-click="$parent.new[life] = copy(entry);">Dupe</a></div>
 
           </div>
         </div>
