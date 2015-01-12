@@ -56,17 +56,17 @@
     <div ng-style="{position:'fixed', bottom:0, left: 0, zIndex:1001}">
       <button ng-click="hide.note = !hide.note"><span ng-show="hide.note">Hide</span><span ng-show="!hide.note">Note</span></button>
     </div>
-    <div style="width: 79%; float:left; padding-left:1%; float: right;">
-      <div style="text-align:center; padding:0em;overflow: visible; width:33%; float:left; margin-top:-20px" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
+    <div style="width: 79%;padding-left:1%; float: right;">
+      <div style="text-align:center; padding:0em;overflow: visible; width:33%; float:right; margin-top:-20px" ng-repeat="(key,linkGroup) in nav" ng-if="showMenu">
         <div style="position:relative; padding:1em 0; ">
-          <h2 style="position:fixed;  background: rgba(239,221,249,.61); text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)">
+          <span style="position:fixed; background: rgba(239,221,249,.61); text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)">
             <a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a>
-          </h2>
+          </span>
         </div>
-        <div style="float: left; position:relative;">
-          <div ng-show="!showLinks[$parent.key]" ng-repeat="link in linkGroup" style="padding:1.4em;">
-            <a style="position:relative; text-shadow: 2px 3px 3px rgba(244, 236, 251, .97)!important;" ng-click="hideAll(); beGone[link] = ''"><button style="position:fixed; background: rgba(239,221,249,.38); font-size: 1.4em; width:15%; margin: -1em 2em; text-shadow: 2px 2px 5px rgba(55,34,21,.62);">{{link}}</button></a>
-          </div>
+        <div style="position:fixed;">
+          <span  ng-show="!showLinks[$parent.key]" ng-repeat="link in linkGroup">
+            <a style="text-shadow: 2px 3px 3px rgba(244, 236, 251, .97)!important;" ng-click="hideAll(); beGone[link] = ''"><button>{{link}}</button></a>
+          </span>
 
         </div>
       </div>
@@ -133,7 +133,7 @@
             </div>
           </form>
             <hr/>
-            <div style="text-align: right;  clear:both"><button style="" ng-click="pastEntries = ! pastEntries">Past Entries</button></div>
+            <div style="text-align: center;  clear:both"><button style="" ng-click="pastEntries = ! pastEntries">Past Entries</button></div>
             <hr/>
           <div ng-if="pastEntries" class="posts" ng-repeat="(key, entry) in $parent[life]">
             <input ng-if="entry.title" type="text" ng-model="entry.title" ng-click="showFullEntry = !showFullEntry"/>
@@ -179,17 +179,17 @@
               <hr/>
             </div>
 
-            <span ng-show="!remove" ng-click="remove = true"> X </span>
+            <button ng-show="!remove" ng-click="remove = true">x</button>
             <a  ng-show="remove" ng-click="remove = !remove">Cancel</a> |
-            <a ng-show="remove" ng-click="removeEntry(life,key)"> Kick it! </a>
+            <button ng-show="remove" ng-click="removeEntry(life,key)"> Kick it! </button>
             <code>
               {{entry.created | date:['shortTime']}}
               {{entry.created | date:['mediumDate']}}
             </code>
             <div style="">
-              <button style="float:right;" ng-click="$parent.new[life] = copy(entry);"> + </button>
-              <button style="float:right;" ng-show="!showFullEntry" ng-click="showFullEntry = !showFullEntry"> > </button>
-              <button style="float:right;" ng-show="showFullEntry" ng-click="showFullEntry = !showFullEntry"> ^ </button>
+              <button style="float:right;" ng-click="$parent.new[life] = copy(entry);">Copy +</button>
+              <button style="float:right;" ng-show="!showFullEntry" ng-click="showFullEntry = !showFullEntry">More</button>
+              <button style="float:right;" ng-show="showFullEntry" ng-click="showFullEntry = !showFullEntry">Less</button>
             </div>
 
           </div>
