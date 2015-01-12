@@ -13,7 +13,7 @@ angular.module('irth', ['firebase'])
 		'http://1.bp.blogspot.com/-au1Rmty2iV0/UPImcpH-apI/AAAAAAAAQ6Y/KmW3gEBmReY/s1600/6.jpg'
 	];
 	$scope.style = {};
-	$scope.style.note = {position:'fixed', bottom: 0, left:0, width:'300px', minHeight: '300px', margin: '0.7%'};
+	$scope.style.note = {position:'fixed', bottom: 0, left:0, width:'300px', minHeight: '300px', margin: '0 0.7%', zIndex:0};
 	$scope.show = {note:{big:true}};
 	$scope.showLinks = {mind:true,body:true,spirit:true};
 	$scope.life = [];
