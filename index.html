@@ -58,7 +58,7 @@
     </div>
     <div style="width: 79%; padding-left:1%; float: right;">
       <div style="text-align:center; height: 62px; padding:0em;overflow: visible; width:33%; float:right; margin-top:-20px" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
-        <div style="position:relative; padding:1em 0; ">
+        <div style="position:relative; padding:1em 0; text-align:left">
           <span style="position:fixed; background: rgba(239,221,249,.61); text-shadow: 2px -3px 3px 2px rgba(244, 236, 251, .97)">
             <a ng-click="showLinks[key] = !showLinks[key]">{{key | uppercase}}</a>
           </span>
@@ -74,11 +74,11 @@
           <div style="{{beGone[life]}}">
           <form class="new" id="{{life}}" ng-submit="$parent.api.add[life](new[life]); new[life]={};">
 
-            <div ng-if="life !== 'day' && life !== 'water'">
+            <div ng-if="life !== 'day'">
               <input type="text" ng-model="new[life].name" placeholder="{{life}} name" x-webkit-speech="true"/>
             </div>
 
-            <div ng-if="life !== 'day' && life !== 'water'">
+            <div ng-if="life !== 'day'">
               <textarea type="text" ng-model="new[life].details" placeholder="{{life}} details" ></textarea>
             </div>
 
@@ -86,14 +86,19 @@
               <textarea type="text" ng-model="$parent.new[life].recap" placeholder="{{life}} recap" ></textarea>
               <textarea type="text" ng-model="$parent.new[life].goals" placeholder="{{life}}-after's goals" ></textarea>
             </div>
-            <div ng-if="life === 'water'">
-              <input type="number" ng-model="$parent.new[life].milliliters" placeholder="You're drunk, go home. in ml"/>
-            </div>
 
-            <div ng-if="life === 'diet'">
-              <div class="multichoice" ng-init="nutrition.types = ['protein', 'fats', 'grains', 'legumes', 'fruits', 'vegetables', 'seeds-nuts', 'sugars']; nutrition.amounts = [1,2,3,4,5]">
+            <div ng-if="life === 'fuel'">
+              <div class="multichoice" ng-init="nutrition.types = ['protein', 'fats', 'carbs', 'grains', 'sodium',  'sugars', 'meat', 'legumes', 'fruits', 'vegetables', 'seeds-nuts']; nutrition.amounts = [1,2,3,4,5]">
+                <div>
+                  <span>
+                    <b>Hydrate</b>
+                  </span>
+                  <span>
+                    <input type="number" ng-model="new[life].hydrate"/>ml
+                  </span>
+
+                </div>
                 <table>
-
                   <tr ng-repeat="type in nutrition.types">
                     <td>
                       <b>{{type}}</b>
@@ -125,7 +130,7 @@
               </div>
             </div>
             <div
-                    ng-if="life !== 'day' && life !== 'event' && life !== 'insight' && life !== 'water' && life !== 'diet' && life !== 'task' && life !== 'note'">
+                    ng-if="life !== 'day' && life !== 'event' && life !== 'fuel' && life !== 'task' && life !== 'note'">
               <input type="number" ng-model="new[life].minutes" placeholder="Minutes" ng-change="new[life].time = ((new[life].hours * 60) + new[life].minutes);"/>
               <input type="number" ng-model="new[life].hours" placeholder="Hours" ng-change="new[life].time = ((new[life].hours * 60) + new[life].minutes);">
             </div>
@@ -146,10 +151,11 @@
               <button class="submit"><h1>Add {{life}}</h1></button>
             </div>
           </form>
-            <hr/>
-            <div style="text-align: center;  clear:both"><button style="" ng-click="pastEntries = ! pastEntries">Past Entries</button></div>
-            <hr/>
-          <div ng-if="pastEntries" class="posts" ng-repeat="(key, entry) in $parent[life]">
+          <div style="text-align: center;  clear:both">
+            <input type="text" ng-model="search"/>
+            <button style="" ng-click="pastEntries = ! pastEntries">Past Entries</button>
+          </div>
+          <div ng-if="pastEntries" class="posts" ng-repeat="(key, entry) in $parent[life] | filter:search">
             <input ng-if="entry.title" type="text" ng-model="entry.title" ng-click="showFullEntry = !showFullEntry"/>
             <input ng-if="entry.name" type="text" ng-model="entry.name" ng-click="showFullEntry = !showFullEntry"/>
             <hr/>
@@ -170,8 +176,8 @@
               <div ng-if="entry.note">
                 <textarea id="note" ng-model="entry.note"></textarea>
               </div>
-              <div ng-if="entry.milliliters">
-                <input ng-model="entry.milliliters"/>
+              <div ng-if="entry.hydrate">
+                <input ng-model="entry.hydrate"/>
               </div>
               <div ng-if="entry.goals">
                 <label for="goals">Next day's goals</label>

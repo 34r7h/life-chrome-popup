@@ -3,8 +3,8 @@ angular.module('irth', ['firebase'])
 .controller('ctrl', function($scope, $firebase, $firebaseAuth, $location){
 	var dbURL = 'https://yourlife.firebaseio.com/',
 	ref = {}, sync = {}, bind = {}, authRef = new Firebase(dbURL);
-	$scope.lifestyle = [ 'activity', 'event', 'diet', 'exercise', 'day', 'insight', 'task', 'note', 'water' ];
-	$scope.nav = {body:['diet', 'exercise', 'water'], mind:['activity', 'task', 'note'], spirit:['day', 'insight', 'event']};
+	$scope.lifestyle = [ 'activity', 'event', 'fuel', 'exercise', 'day', 'task', 'note'];
+	$scope.nav = {body:['fuel', 'exercise'], mind:['activity', 'task', 'note'], spirit:['day', 'event']};
 	$scope.pictures = [
 		'http://www.emahomagazine.com/wp-content/uploads/2013/04/%E7%BA%A2%E8%89%B2%E4%BC%A0%E8%AF%B42-Red-No.2.jpg',
 		'http://wallpaperest.com/wallpapers/abstract-yellow-and-orange_325759.jpg',
@@ -119,3 +119,21 @@ angular.module('irth', ['firebase'])
 		return $sce.trustAsResourceUrl(val);
 	};
 }]);
+/*
+.filter('searchResults', function($firebase){
+	return function(entries, search) {
+		var results = [];
+		console.log('search', search);
+		console.log('entry', entries);
+		var searchable = entries.$asArray();
+		searchable.$filter();
+		angular.forEach(entries, function(entry){
+			if(search === entry) {
+				console.log('value allowed',entry);
+				results.push(entry)
+			}
+		});
+		return results;
+	}
+});
+*/
