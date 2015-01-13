@@ -135,16 +135,15 @@
               <input type="number" ng-model="new[life].hours" placeholder="Hours" ng-change="new[life].time = ((new[life].hours * 60) + new[life].minutes);">
             </div>
             <input
-                    ng-if="life !== 'day' && life !== 'water'"
+                    ng-if="life !== 'day'"
                     type="text"
                     ng-model="new[life].tags"
                     placeholder="Tags"/>
             <select
                     ng-init="ratings = ['5', '4', '3', '2', '1']"
-                    ng-if="life !== 'water'"
                     ng-model="new[life].quality"
                     ng-options="rating for rating in ratings | uppercase">
-              <option value="">Rate the {{life}}</option>
+              <option value="">Rate this {{life | uppercase}}</option>
             </select>
 
             <div>
@@ -152,8 +151,8 @@
             </div>
           </form>
           <div style="text-align: center;  clear:both">
-            <input type="text" ng-model="search"/>
-            <button style="" ng-click="pastEntries = ! pastEntries">Past Entries</button>
+            <input type="text" ng-model="search" placeholder="Search"/>
+            <button style="" ng-click="pastEntries = !pastEntries">Past Entries</button>
           </div>
           <div ng-if="pastEntries" class="posts" ng-repeat="(key, entry) in $parent[life] | filter:search">
             <input ng-if="entry.title" type="text" ng-model="entry.title" ng-click="showFullEntry = !showFullEntry"/>
