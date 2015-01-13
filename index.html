@@ -36,8 +36,7 @@
 
       <div class="current" ng-if="!showCurrent">
         <h2>Today</h2>
-
-        <span ng-if="$last" ng-repeat="yesterday in $parent.day | limitTo:-1 ">{{yesterday.goals}}</span>
+        <textarea ng-if="$last" ng-model="yesterday.goals" ng-repeat="yesterday in $parent.day | limitTo:-1 "></textarea>
         <hr>
         <h3>Objectives</h3>
         <div ng-if="!task.done === true" ng-repeat="(key,task) in $parent.task">
@@ -58,7 +57,7 @@
     <div ng-style="{position:'fixed', bottom:0, left: 0, zIndex:1001}">
       <button ng-click="hide.note = !hide.note"><span ng-show="hide.note">Hide</span><span ng-show="!hide.note">Note</span></button>
     </div>
-    <div style="width: 79%; padding-left:1%; float: right; max-height:590px">
+    <div style="width: 79%; padding-left:1%; float: right; max-height:590px;">
       <div style="text-align:center; height: 77px; padding:0em;overflow: visible; width:33%; float:right; margin-top:-20px" ng-repeat="(key,linkGroup) in nav" ng-if="!showMenu">
         <div style="position:fixed; top:-12px">
           <span  ng-show="!showLinks[$parent.key]" ng-repeat="link in linkGroup">

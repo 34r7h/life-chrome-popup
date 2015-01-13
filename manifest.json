@@ -2,6 +2,9 @@
   "manifest_version": 2,
 
   "name": "Life",
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  },
   "description": "Tracking daily activities from the browser.",
   "omnibox": {"keyword":"pop"},
   "version": "0.6",
@@ -17,7 +20,7 @@
     "48": "icon.png",
     "128": "icon.png" 
     },
-    
+
     "permissions": [
         "<all_urls>",
         "notifications",

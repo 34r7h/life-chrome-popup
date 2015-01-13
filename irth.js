@@ -9,6 +9,7 @@ angular.module('irth', ['firebase'])
 		'images/Red-No.2.jpg',
 		//'images/abstract-yellow-and-orange_325759.jpg',
 		'images/green-05.jpg',
+		'images/robert-babylon6.jpg',
 		'images/purple_indigo_violet_by_aspartamee-d2zm8e3.jpg',
 		'images/LION-VIOLET.jpg',
 		'images/sky-003.jpg'
