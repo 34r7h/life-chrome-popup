@@ -8,7 +8,6 @@ angular.module('irth', ['firebase'])
 	$scope.pictures = [
 		'images/Red-No.2.jpg',
 		//'images/abstract-yellow-and-orange_325759.jpg',
-		'images/g2.jpg',
 		'images/green-05.jpg',
 		'images/purple_indigo_violet_by_aspartamee-d2zm8e3.jpg',
 		'images/LION-VIOLET.jpg',
