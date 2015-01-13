@@ -3,7 +3,7 @@
 }
 h2 {margin: 0}
 body {
-    width:600px;
+    //width:600px;
     background: rgba(245,246,227,.38);
 }
 .current {background: rgba(236,247,254,.61); padding:1em; }

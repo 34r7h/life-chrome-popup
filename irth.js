@@ -6,7 +6,7 @@ angular.module('irth', ['firebase'])
 	$scope.lifestyle = [ 'activity', 'event', 'fuel', 'exercise', 'day', 'task', 'note'];
 	$scope.nav = {ALPHA:['activity', 'task', 'note'], BETA:['fuel', 'exercise'], PHI:['day', 'event']};
 	$scope.pictures = [
-		'images/%E7%BA%A2%E8%89%B2%E4%BC%A0%E8%AF%B42-Red-No.2.jpg',
+		'images/Red-No.2.jpg',
 		//'images/abstract-yellow-and-orange_325759.jpg',
 		//'images/g2.jpg',
 		'images/green-05.jpg',
@@ -61,7 +61,7 @@ angular.module('irth', ['firebase'])
 	};
 	if($scope.location.$$protocol === 'chrome-extension'){
 		$scope.auth('i@o.io','o');
-		$scope.showLinks = {};
+		$scope.dimensions = {width:'600px'}
 	}
 
 	$scope.getData = function(){

@@ -13,7 +13,7 @@
     <script src="bower_components/angularfire/dist/angularfire.js"></script>
     <script src="irth.js"></script>
 
-  <body ng-init="backgroundImg = getPicture()" ng-controller="ctrl" style="background: url('{{backgroundImg}}') center center fixed">
+  <body ng-init="backgroundImg = getPicture()" ng-controller="ctrl" style="background: url('{{backgroundImg}}') center center fixed" ng-style="dimensions">
     <div class="side">
       <div style="text-align: center; padding:1em 0; width: 100%; color: rgba(2,4,8,.62); clear: both;">
         <b ng-if="authObj.$getAuth().password.email">{{ authObj.$getAuth().password.email}}Life</b>
