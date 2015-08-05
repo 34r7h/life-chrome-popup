@@ -3,10 +3,10 @@ angular.module('irth', ['firebase','mm.foundation'])
 .controller('ctrl', function($scope, $firebase, $firebaseAuth, $location, $window, $timeout){
 	var dbURL = 'https://yourlife.firebaseio.com/',
 	ref = {}, backgroundsRef={}, sync = {}, backgroundsSync = {}, bind = {}, authRef = new Firebase(dbURL);
-	$scope.lifestyle = [ 'activity', 'event', 'fuel', 'train', 'day', 'task', 'note', 'stress', 'thanks'];
-	$scope.nav = {ALPHA:['activity', 'task'], BETA:['fuel', 'train'], PHI:['day', 'event'], OMEGA:['stress', 'thanks']};
+	$scope.lifestyle = [ 'action', 'event', 'fuel', 'train', 'day', 'task', 'note', 'fear', 'love'];
+	$scope.nav = {ALPHA:['action', 'task'], BETA:['fuel', 'train'], PHI:['day', 'event'], OMEGA:['fear', 'love']};
 	$scope.style = {};
-	$scope.style.note = {position:'fixed', bottom: 0, left:0, width:$window.innerWidth+'px', height:($window.innerHeight - 40)+'px', zIndex:10000};
+	$scope.style.note = {position:'fixed', bottom: 0, left:0, width:$window.innerWidth+'px', height:( $window.innerHeight / 2 )+'px', zIndex:10000, background:'rgba(23,43,12, .62)'};
 	$scope.show = {note:{big:true}};
 	$scope.showLinks = {mind:true,body:true,spirit:true};
 	$scope.life = [];
@@ -66,7 +66,7 @@ angular.module('irth', ['firebase','mm.foundation'])
 		})();
 
 
-		$scope.beGone.activity = '';
+		$scope.beGone.action = '';
 
 	};
 	$scope.getData();
@@ -85,7 +85,7 @@ angular.module('irth', ['firebase','mm.foundation'])
 	});
 	$scope.api.add['backgrounds'] = function(url){
 		backgroundsSync.$push(url);
-	}
+	};
 	$scope.removeBackgrounds = function(id) {
 		backgroundsSync.$remove(id);
 	};
@@ -118,7 +118,7 @@ angular.module('irth', ['firebase','mm.foundation'])
 
 /**
 // Local storage start ($window.TEMPORARY can be switched with $window.PERMANENT)
-		$scope.cLifestyle = [{name:'activity', models:{name: new String(), time: new Number(), details: new String(), tags: new Array() }, methods:{create:$scope.addActivity}}];
+		$scope.cLifestyle = [{name:'action', models:{name: new String(), time: new Number(), details: new String(), tags: new Array() }, methods:{create:$scope.addAction}}];
 		function onInitFs(fs) {
   			console.log('Opened file system: ' + fs.name);
 		}
